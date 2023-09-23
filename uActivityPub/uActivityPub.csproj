@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <Title>uActivityPub - fediverse for umbraco</Title>
         <Authors>Eduward Post</Authors>
         <Description>A umbraco package user to make your installation interface with the fediverse</Description>
         <RepositoryUrl>https://github.com/eduwardpost/uActivityPub.git</RepositoryUrl>
@@ -19,6 +20,8 @@
         <PackageTags>library, umbraco</PackageTags>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Product>uActivityPub</Product>
+        <PackageId>uActivityPub</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
