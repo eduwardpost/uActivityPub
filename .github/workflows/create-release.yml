@@ -1,4 +1,5 @@
 name: "tagged-release"
+
 on:
   push:
     tags:
@@ -8,10 +9,12 @@ jobs:
   tagged-release:
     name: "Tagged Release"
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
     steps:
       - name: Print version
         run: echo "Creating version ${{github.ref_name}}"
-      - name: Create github Release
+      - name: Create Github Release
         uses: ncipollo/release-action@v1.13.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
