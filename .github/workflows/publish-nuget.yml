@@ -9,9 +9,11 @@ on:
   pull_request:
     branches:
       - '*'          # Run the workflow for all pull requests
-  release:
+  workflow_run:
+    workflows:
+      - tagged-release
     types:
-      - released # Run the workflow when a new GitHub release is released
+      - completed
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -82,7 +84,7 @@ jobs:
     # Publish only when creating a GitHub Release
     # https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
     # You can update this logic if you want to manage releases differently
-    if: github.event_name == 'release'
+    if: github.event_name == 'workflow_run'
     runs-on: ubuntu-latest
     needs: [ validate_nuget, run_test ]
     steps:
