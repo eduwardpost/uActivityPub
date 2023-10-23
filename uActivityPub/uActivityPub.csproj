@@ -34,7 +34,7 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Umbraco.Cms.Core" Version="10.7.0" />
-        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="10.7.0" />
+        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="12.2.0" />
         <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.7.0" />
     </ItemGroup>
 
