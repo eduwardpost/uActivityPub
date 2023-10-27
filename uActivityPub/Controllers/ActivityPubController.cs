@@ -11,7 +11,8 @@ using uActivityPub.Services;
 
 namespace uActivityPub.Controllers;
 
-[Route("activitypub")]
+[Route("/activitypub")]
+
 public class ActivityPubController : UmbracoApiController
 {
     private readonly IUserService _userService;
