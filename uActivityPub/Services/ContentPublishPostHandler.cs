@@ -20,10 +20,11 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
     private readonly ISignatureService _signatureService;
     private readonly ISingedRequestHandler _singedRequestHandler;
     private readonly IActivityHelper _activityHelper;
+    private readonly IUActivitySettingsService _uActivitySettingsService;
 
     public ContentPublishPostHandler(IUmbracoDatabaseFactory databaseFactory,
         IOptions<WebRoutingSettings> webRoutingSettings, IUserService userService, ISignatureService signatureService,
-        ISingedRequestHandler singedRequestHandler, IActivityHelper activityHelper)
+        ISingedRequestHandler singedRequestHandler, IActivityHelper activityHelper, IUActivitySettingsService uActivitySettingsService)
     {
         _databaseFactory = databaseFactory;
         _webRoutingSettings = webRoutingSettings;
@@ -31,12 +32,24 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
         _signatureService = signatureService;
         _singedRequestHandler = singedRequestHandler;
         _activityHelper = activityHelper;
+        _uActivitySettingsService = uActivitySettingsService;
     }
 
     public void Handle(ContentPublishedNotification notification)
     {
+        var settings = _uActivitySettingsService.GetAllSettings();
+        var contentAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
+        var userPropertyAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
+
+        if (contentAlias == null)
+            throw new InvalidOperationException("Could not find configured key for the content type");
+        if (userPropertyAlias == null)
+            throw new InvalidOperationException("Could not find configured key for the user property type");
+
+        
+        
         var post = notification.PublishedEntities.FirstOrDefault();
-        if (post is not {ContentType.Alias: "article"}) 
+        if (post?.ContentType.Alias != contentAlias.Value) 
             return;
         
         using var database = _databaseFactory.CreateDatabase();
@@ -50,7 +63,7 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
             return;
             
             
-        var userId = post.GetValue<int>("authorName");
+        var userId = post.GetValue<int>(userPropertyAlias!.Value);
         var user = _userService.GetUserById(userId);
         if (user == null)
         {

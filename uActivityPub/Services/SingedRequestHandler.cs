@@ -14,6 +14,7 @@ public class SingedRequestHandler : ISingedRequestHandler
         _httpClientFactory = httpClientFactory;
     }
     
+    /// <inheritdoc/>
     public async Task<HttpResponseMessage> SendSingedPost(Uri requestUri, RSA rsa, string jsonBody, string keyId)
     {
         var client = _httpClientFactory.CreateClient();

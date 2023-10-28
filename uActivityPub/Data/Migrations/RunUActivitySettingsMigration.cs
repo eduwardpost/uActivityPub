@@ -9,14 +9,14 @@ using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 
 namespace uActivityPub.Data.Migrations;
 
-public class RunReceivedActivitiesMigration : INotificationHandler<UmbracoApplicationStartingNotification>
+public class RunUActivitySettingsMigration : INotificationHandler<UmbracoApplicationStartingNotification>
 {
     private readonly IMigrationPlanExecutor _migrationPlanExecutor;
     private readonly ICoreScopeProvider _coreScopeProvider;
     private readonly IKeyValueService _keyValueService;
     private readonly IRuntimeState _runtimeState;
 
-    public RunReceivedActivitiesMigration(
+    public RunUActivitySettingsMigration(
         ICoreScopeProvider coreScopeProvider,
         IMigrationPlanExecutor migrationPlanExecutor,
         IKeyValueService keyValueService,
@@ -37,12 +37,12 @@ public class RunReceivedActivitiesMigration : INotificationHandler<UmbracoApplic
 
         // Create a migration plan for a specific project/feature
         // We can then track that latest migration state/step for this project/feature
-        var migrationPlan = new MigrationPlan("ReceivedActivityPubActivities");
+        var migrationPlan = new MigrationPlan("uActivitySettings");
 
         // This is the steps we need to take
         // Each step in the migration adds a unique value
         migrationPlan.From(string.Empty)
-            .To<AddReceivedActivitiesTable>("received-activities-db");
+            .To<AddUActivityTable>("uActivitySettings-db");
 
         // Go and upgrade our site (Will check if it needs to do the work or not)
         // Based on the current/latest step

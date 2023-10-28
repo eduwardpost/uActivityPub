@@ -7,7 +7,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 
-namespace uActivityPub.Data;
+namespace uActivityPub.Data.Migrations;
 
 public class RunUserKeysMigration : INotificationHandler<UmbracoApplicationStartingNotification>
 {
