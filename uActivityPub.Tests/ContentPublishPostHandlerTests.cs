@@ -38,6 +38,12 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -105,7 +111,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 
@@ -127,6 +133,11 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -201,7 +212,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 
@@ -223,6 +234,12 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+                    .Returns(uActivitySettingsHelper.GetSettings);
+        
+        
         contentTypeMock.Setup(x => x.Alias).Returns("nonArticle");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
 
@@ -240,7 +257,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 
@@ -260,6 +277,11 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -291,7 +313,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 
@@ -313,6 +335,8 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -336,7 +360,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
         
         try
         {
@@ -359,6 +383,11 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -419,7 +448,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 
@@ -441,6 +470,11 @@ public class ContentPublishPostHandlerTests
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -508,7 +542,7 @@ public class ContentPublishPostHandlerTests
 
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
 
         //Act
 

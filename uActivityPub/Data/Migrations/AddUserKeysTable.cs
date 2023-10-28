@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Infrastructure.Migrations;
 
-namespace uActivityPub.Data;
+namespace uActivityPub.Data.Migrations;
 
 public class AddUserKeysTable : MigrationBase
 {

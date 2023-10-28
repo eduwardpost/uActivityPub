@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using uActivityPub.Data;
+using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
 using Umbraco.Cms.Core.Configuration.Models;
@@ -30,6 +32,11 @@ public class OutboxServiceTests
         const string actorString = "https://localhost.test/actor/testactor";
         var contentServiceMock = new Mock<IContentService>();
         var activityHelperMock = new Mock<IActivityHelper>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         var userMock = new Mock<IUser>();
 
         var rootContentMock = new Mock<IContent>();
@@ -80,7 +87,8 @@ public class OutboxServiceTests
         var unitUnderTest = new OutboxService(
             contentServiceMock.Object,
             _webRouterSettingsMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object,
+            iUActivitySettingsServiceMock.Object);
 
         //Act
         var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
@@ -99,16 +107,19 @@ public class OutboxServiceTests
         var contentServiceMock = new Mock<IContentService>();
         var activityHelperMock = new Mock<IActivityHelper>();
         var userMock = new Mock<IUser>();
-
-        var rootContentMock = new Mock<IContent>();
-
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
+        
         contentServiceMock.Setup(x => x.GetRootContent())
             .Returns(new List<IContent>());
 
         var unitUnderTest = new OutboxService(
             contentServiceMock.Object,
             _webRouterSettingsMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object,
+            iUActivitySettingsServiceMock.Object);
 
         //Act
         var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
@@ -124,6 +135,10 @@ public class OutboxServiceTests
         var contentServiceMock = new Mock<IContentService>();
         var activityHelperMock = new Mock<IActivityHelper>();
         var userMock = new Mock<IUser>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(uActivitySettingsHelper.GetSettings);
 
         var rootContentMock = new Mock<IContent>();
         rootContentMock.Setup(x => x.Id)
@@ -143,7 +158,8 @@ public class OutboxServiceTests
         var unitUnderTest = new OutboxService(
             contentServiceMock.Object,
             _webRouterSettingsMock.Object,
-            activityHelperMock.Object);
+            activityHelperMock.Object,
+            iUActivitySettingsServiceMock.Object);
 
         //Act
         var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
