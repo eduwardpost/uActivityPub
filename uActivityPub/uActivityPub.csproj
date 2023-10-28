@@ -22,8 +22,12 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.2</Version>
-        <AssemblyVersion>1.0.2</AssemblyVersion>
+        <Version>1.0.3</Version>
+        <AssemblyVersion>1.0.3</AssemblyVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\$(TargetFramework)\uActivityPub.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -40,8 +44,8 @@
         <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.7.0" />
     </ItemGroup>
     
-    <ItemGroup>
-        <Content Include="App_Plugins\uActivityPub\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
-    </ItemGroup>
+<!--    <ItemGroup>-->
+<!--        <Content Include="App_Plugins\uActivityPub\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />-->
+<!--    </ItemGroup>-->
 
 </Project>
