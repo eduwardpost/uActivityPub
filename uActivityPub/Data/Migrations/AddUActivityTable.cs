@@ -3,9 +3,9 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uActivityPub.Data.Migrations;
 
-public class AddUActivityTable : MigrationBase
+public class AddUActivitySettingsTable : MigrationBase
 {
-    public AddUActivityTable(IMigrationContext context) : base(context)
+    public AddUActivitySettingsTable(IMigrationContext context) : base(context)
     {
     }
     protected override void Migrate()
