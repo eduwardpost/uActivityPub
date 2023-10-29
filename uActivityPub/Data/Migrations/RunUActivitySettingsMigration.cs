@@ -42,7 +42,7 @@ public class RunUActivitySettingsMigration : INotificationHandler<UmbracoApplica
         // This is the steps we need to take
         // Each step in the migration adds a unique value
         migrationPlan.From(string.Empty)
-            .To<AddUActivityTable>("uActivitySettings-db");
+            .To<AddUActivitySettingsTable>("uActivitySettings-db");
 
         // Go and upgrade our site (Will check if it needs to do the work or not)
         // Based on the current/latest step
