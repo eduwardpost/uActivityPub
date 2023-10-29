@@ -6,7 +6,7 @@ namespace uActivityPub.Data;
 
 // ReSharper disable once InconsistentNaming
 [TableName(uActivitySettingKeys.TableName)]
-[PrimaryKey("Id", AutoIncrement = false)]
+[PrimaryKey("Id", AutoIncrement = true)]
 [ExplicitColumns]
 public class uActivitySettings
 {
