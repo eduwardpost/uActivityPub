@@ -1,4 +1,5 @@
-﻿using NPoco;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using NPoco;
 using uActivityPub.Helpers;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
@@ -10,16 +11,17 @@ namespace uActivityPub.Data;
 [ExplicitColumns]
 public class uActivitySettings
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [PrimaryKeyColumn(AutoIncrement = true, IdentitySeed = 1)]
-    [Column("UserId")]
+    [NPoco.Column("UserId")]
     public int Id { get; set; }
     
-    [Column("Key")]
+    [NPoco.Column("Key")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     [NullSetting(NullSetting = NullSettings.NotNull)]
     public string Key { get; set; } = default!;
 
-    [Column("Value")]
+    [NPoco.Column("Value")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
     [NullSetting(NullSetting = NullSettings.NotNull)]
     public string Value { get; set; } = default!;
