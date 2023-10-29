@@ -15,7 +15,7 @@ public class AddUActivitySettingsTable : MigrationBase
         // Lots of methods available in the MigrationBase class - discover with this.
         if (TableExists("uActivitySettings") == false)
         {
-            Create.Table<ReceivedActivitiesSchema>().Do();
+            Create.Table<uActivitySettings>().Do();
         }
         else
         {
