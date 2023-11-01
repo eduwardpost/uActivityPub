@@ -13,8 +13,8 @@ public class uActivitySettings
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [PrimaryKeyColumn(AutoIncrement = true, IdentitySeed = 1)]
-    [NPoco.Column("UserId")]
-    public int Id { get; set; }
+    [NPoco.Column("Id")]
+    public long Id { get; set; }
     
     [NPoco.Column("Key")]
     [SpecialDbType(SpecialDbTypes.NVARCHARMAX)]
