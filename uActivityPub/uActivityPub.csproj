@@ -41,7 +41,7 @@
         </PackageReference>
         <PackageReference Include="Umbraco.Cms.Core" Version="10.7.0" />
         <PackageReference Include="Umbraco.Cms.Infrastructure" Version="10.7.0" />
-        <PackageReference Include="Umbraco.Cms.Web.Common" Version="10.7.0" />
+        <PackageReference Include="Umbraco.Cms.Web.Common" Version="12.3.0" />
     </ItemGroup>
     
 <!--    <ItemGroup>-->
