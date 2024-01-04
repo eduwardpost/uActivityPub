@@ -22,8 +22,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.8</Version>
-        <AssemblyVersion>1.0.8</AssemblyVersion>
+        <Version>1.0.9</Version>
+        <AssemblyVersion>1.0.9</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
