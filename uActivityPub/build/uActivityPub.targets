@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <uSyncPackageFolder Include="$(MSBuildProjectDirectory)\App_Plugins\uActivityPub\" />
+    </ItemGroup>
+</Project>

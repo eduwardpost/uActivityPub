@@ -1,11 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using uActivityPub.Authorization;
 using uActivityPub.Data;
 using uActivityPub.Data.Migrations;
 using uActivityPub.Helpers;
+using uActivityPub.Notifications;
 using uActivityPub.Services;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Web.BackOffice.Authorization;
 
 namespace uActivityPub.Composers;
 
@@ -19,11 +24,22 @@ public class UActivityPubComposer : IComposer
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunUActivitySettingsMigration>();
         builder.AddNotificationHandler<UmbracoApplicationStartedNotification, SettingSeedHelper>();
         builder.AddNotificationHandler<ContentPublishedNotification , ContentPublishPostHandler>();
+        builder.AddNotificationHandler<ServerVariablesParsingNotification, uActivityPubServerVariablesHandler>();
         builder.Services.AddTransient<IInboxService, InboxService>();
         builder.Services.AddTransient<IOutboxService, OutboxService>();
         builder.Services.AddTransient<ISignatureService, SignatureService>();
         builder.Services.AddTransient<ISingedRequestHandler, SingedRequestHandler>();
         builder.Services.AddTransient<IActivityHelper, ActivityHelper>();
         builder.Services.AddTransient<IUActivitySettingsService, UActivitySettingsService>();
+        builder.Services.AddAuthorization(o => CreatePolicies(o));
+    }
+    
+    private static void CreatePolicies(AuthorizationOptions options, string backofficeAuthenticationScheme = Constants.Security.BackOfficeAuthenticationType)
+    {
+        options.AddPolicy(SyncAuthorizationPolicies.TreeAccessUActivityPub, policy =>
+        {
+            policy.AuthenticationSchemes.Add(backofficeAuthenticationScheme);
+            policy.Requirements.Add(new TreeRequirement("uActivityPubAlias"));
+        });
     }
 }

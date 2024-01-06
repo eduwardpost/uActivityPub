@@ -103,7 +103,7 @@ public class ActivityHelperTests
 
         _publishedContentCacheMock
             .Setup(x => x.GetById(It.IsAny<int>()))
-            .Returns<IPublishedContent?>(null);
+            .Returns<IPublishedContent?>(null!);
        
 
         var unitUnderTest = new ActivityHelper(_webRouterSettingsMock.Object, _umbracoContextAccessorMock.Object, _publishedUrlProvider.Object);

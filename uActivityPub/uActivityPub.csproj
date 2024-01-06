@@ -22,8 +22,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.9</Version>
-        <AssemblyVersion>1.0.9</AssemblyVersion>
+        <Version>1.0.10</Version>
+        <AssemblyVersion>1.0.10</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -41,11 +41,13 @@
         </PackageReference>
         <PackageReference Include="Umbraco.Cms.Core" Version="13.0.3" />
         <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.0.3" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.0.3" />
         <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.0.3" />
     </ItemGroup>
     
-<!--    <ItemGroup>-->
-<!--        <Content Include="App_Plugins\uActivityPub\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />-->
-<!--    </ItemGroup>-->
-
+    <ItemGroup>
+        <Content Include="App_Plugins\uActivityPub\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="build\**" Pack="true" PackagePath="buildTransitive" />
+    </ItemGroup>
+    
 </Project>
