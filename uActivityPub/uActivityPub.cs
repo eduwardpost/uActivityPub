@@ -48,7 +48,7 @@ public static class USyncStaticAssetsExtensions
                 ],
                 // Stylesheets = new[]
                 // {
-                //     $"{uSyncConstants.Package.PluginPath}/usync.{version}.min.css"
+                //     $"{uSyncConstants.Package.PluginPath}/uactivitypub.{version}.min.css"
                 // }
             });
         }
