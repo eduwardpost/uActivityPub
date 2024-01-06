@@ -6,21 +6,21 @@ using Umbraco.Extensions;
 
 namespace uActivityPub.Notifications;
 
-public class uActivitySyncServerVariablesHandler  : INotificationHandler<ServerVariablesParsingNotification>
+public class uActivityPubServerVariablesHandler  : INotificationHandler<ServerVariablesParsingNotification>
 {
     private readonly LinkGenerator _linkGenerator;
 
     /// <inheritdoc cref="INotificationHandler{TNotification}" />
-    public uActivitySyncServerVariablesHandler(LinkGenerator linkGenerator)
+    public uActivityPubServerVariablesHandler(LinkGenerator linkGenerator)
     {
         _linkGenerator = linkGenerator;    
     }
     
     public void Handle(ServerVariablesParsingNotification notification)
     {
-        notification.ServerVariables.Add("uActivitySync", new Dictionary<string, object>
+        notification.ServerVariables.Add("uActivityPub", new Dictionary<string, object>
         {
-            { "uActivitySyncService", _linkGenerator.GetUmbracoApiServiceBaseUrl<UActivitySyncDashboardApiController>(controller => controller.GetApi()) }
+            { "uActivityPubService", _linkGenerator.GetUmbracoApiServiceBaseUrl<UActivityPubDashboardApiController>(controller => controller.GetApi()) }
         });
     }
 }

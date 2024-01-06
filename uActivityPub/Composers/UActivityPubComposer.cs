@@ -24,7 +24,7 @@ public class UActivityPubComposer : IComposer
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunUActivitySettingsMigration>();
         builder.AddNotificationHandler<UmbracoApplicationStartedNotification, SettingSeedHelper>();
         builder.AddNotificationHandler<ContentPublishedNotification , ContentPublishPostHandler>();
-        builder.AddNotificationHandler<ServerVariablesParsingNotification, uActivitySyncServerVariablesHandler>();
+        builder.AddNotificationHandler<ServerVariablesParsingNotification, uActivityPubServerVariablesHandler>();
         builder.Services.AddTransient<IInboxService, InboxService>();
         builder.Services.AddTransient<IOutboxService, OutboxService>();
         builder.Services.AddTransient<ISignatureService, SignatureService>();
@@ -36,10 +36,10 @@ public class UActivityPubComposer : IComposer
     
     private static void CreatePolicies(AuthorizationOptions options, string backofficeAuthenticationScheme = Constants.Security.BackOfficeAuthenticationType)
     {
-        options.AddPolicy(SyncAuthorizationPolicies.TreeAccessuActivitySync, policy =>
+        options.AddPolicy(SyncAuthorizationPolicies.TreeAccessUActivityPub, policy =>
         {
             policy.AuthenticationSchemes.Add(backofficeAuthenticationScheme);
-            policy.Requirements.Add(new TreeRequirement("uActivitySyncAlias"));
+            policy.Requirements.Add(new TreeRequirement("uActivityPubAlias"));
         });
     }
 }

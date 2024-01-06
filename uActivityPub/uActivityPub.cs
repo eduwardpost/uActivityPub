@@ -4,12 +4,6 @@ using Umbraco.Cms.Core.Manifest;
 
 namespace uActivityPub;
 
-// ReSharper disable once InconsistentNaming
-public static class uActivityPub
-{
-    public static string PackageName => "uActivityPub";
-}
-
 public class StaticAssetsBoot : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
@@ -44,14 +38,14 @@ public static class USyncStaticAssetsExtensions
             manifests.Add(new PackageManifest
             {
                 PackageId = "uActivityPub",
-                PackageName = uActivityPub.PackageName,
+                PackageName = uActivityPubConstants.Package.Name,
                 Version = assembly.GetName().Version!.ToString(3),
                 AllowPackageTelemetry = true,
                 BundleOptions = BundleOptions.Default,
-                // Scripts = new[]
-                // {
-                //     $"{uSyncConstants.Package.PluginPath}/usync.{version}.min.js"
-                // },
+                Scripts =
+                [
+                    $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uactivitypub.dashboard.controller.js"
+                ],
                 // Stylesheets = new[]
                 // {
                 //     $"{uSyncConstants.Package.PluginPath}/usync.{version}.min.css"

@@ -8,5 +8,5 @@ public static class SyncAuthorizationPolicies
     /// <summary>
     ///  name of the uSyncTreeAccess policy.
     /// </summary>
-    public const string TreeAccessuActivitySync = nameof(TreeAccessuActivitySync);
+    public const string TreeAccessUActivityPub = nameof(TreeAccessUActivityPub);
 }

@@ -11,7 +11,7 @@ using Umbraco.Extensions;
 
 namespace uActivityPub.Expansions;
 
-[Tree("settings", "uActivitySyncAlias", TreeTitle = "uActivitySync", TreeGroup = "sync", SortOrder = 5)]
+[Tree("settings", "uActivityPubAlias", TreeTitle = "uActivityPub", TreeGroup = "sync", SortOrder = 5)]
 public class SettingsTreeController(
     ILocalizedTextService localizedTextService,
     UmbracoApiControllerTypeCollection umbracoApiControllerTypeCollection,
@@ -45,7 +45,7 @@ public class SettingsTreeController(
         var root = rootResult.Value ?? throw new NullReferenceException(nameof(rootResult));
 
         //set the route
-        root.RoutePath = $"{SectionAlias}/uactivitysync/dashboard";
+        root.RoutePath = $"{SectionAlias}/uactivitypub/dashboard";
         // set the icon
         root.Icon = "icon-mastodon-fill";
         // could be set to false for a custom tree with a single node.
