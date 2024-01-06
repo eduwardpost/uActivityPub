@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+    <area alias="treeHeaders">
+        <key alias="sync">Synchronization</key>
+        <key alias="uactivitysync">uActivitySync</key>
+    </area>
+</language>

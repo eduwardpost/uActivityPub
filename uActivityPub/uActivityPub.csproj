@@ -41,6 +41,7 @@
         </PackageReference>
         <PackageReference Include="Umbraco.Cms.Core" Version="13.0.3" />
         <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.0.3" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.0.3" />
         <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.0.3" />
     </ItemGroup>
     

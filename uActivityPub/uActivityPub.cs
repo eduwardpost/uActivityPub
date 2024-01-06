@@ -47,7 +47,7 @@ public static class USyncStaticAssetsExtensions
                 PackageName = uActivityPub.PackageName,
                 Version = assembly.GetName().Version!.ToString(3),
                 AllowPackageTelemetry = true,
-                BundleOptions = BundleOptions.None,
+                BundleOptions = BundleOptions.Default,
                 // Scripts = new[]
                 // {
                 //     $"{uSyncConstants.Package.PluginPath}/usync.{version}.min.js"
