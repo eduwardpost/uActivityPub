@@ -7,11 +7,13 @@ using Umbraco.Cms.Core.Models.Trees;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Trees;
 using Umbraco.Cms.Web.BackOffice.Trees;
+using Umbraco.Cms.Web.Common.Attributes;
 using Umbraco.Extensions;
 
 namespace uActivityPub.Expansions;
 
-[Tree("settings", "uActivityPubAlias", TreeTitle = "uActivityPub", TreeGroup = "sync", SortOrder = 5)]
+[Tree("settings", uActivityPubConstants.Package.TreeName, TreeTitle = uActivityPubConstants.Package.Name, TreeGroup = uActivityPubConstants.Package.Name, SortOrder = 35)]
+[PluginController(uActivityPubConstants.Package.Name)]
 public class SettingsTreeController(
     ILocalizedTextService localizedTextService,
     UmbracoApiControllerTypeCollection umbracoApiControllerTypeCollection,
@@ -45,7 +47,7 @@ public class SettingsTreeController(
         var root = rootResult.Value ?? throw new NullReferenceException(nameof(rootResult));
 
         //set the route
-        root.RoutePath = $"{SectionAlias}/uactivitypub/dashboard";
+        root.RoutePath = $"{SectionAlias}/{uActivityPubConstants.Package.TreeName}/dashboard";
         // set the icon
         root.Icon = "icon-mastodon-fill";
         // could be set to false for a custom tree with a single node.

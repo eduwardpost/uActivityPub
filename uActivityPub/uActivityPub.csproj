@@ -46,8 +46,15 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Content Include="App_Plugins\uActivityPub\**" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" CopyToOutputDirectory="PreserveNewest" />
-        <None Include="build\**" Pack="true" PackagePath="buildTransitive" />
+        <Content Include="App_Plugins\uActivityPub\**\*.*">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Include="build\**\*.*">
+            <Pack>True</Pack>
+            <PackagePath>buildTransitive</PackagePath>
+        </None>
     </ItemGroup>
     
 </Project>

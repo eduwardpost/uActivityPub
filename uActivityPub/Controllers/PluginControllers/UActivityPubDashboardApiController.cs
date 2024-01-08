@@ -5,7 +5,7 @@ using Umbraco.Cms.Web.Common.Attributes;
 
 namespace uActivityPub.Controllers.PluginControllers;
 
-[PluginController("uActivityPub")]
+[PluginController(uActivityPubConstants.Package.Name)]
 [Authorize(Policy = SyncAuthorizationPolicies.TreeAccessUActivityPub)]
 public class UActivityPubDashboardApiController : UmbracoAuthorizedJsonController
 {

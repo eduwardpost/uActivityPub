@@ -37,11 +37,10 @@ public static class USyncStaticAssetsExtensions
             
             manifests.Add(new PackageManifest
             {
-                PackageId = "uActivityPub",
+                PackageId = uActivityPubConstants.Package.Name,
                 PackageName = uActivityPubConstants.Package.Name,
                 Version = assembly.GetName().Version!.ToString(3),
                 AllowPackageTelemetry = true,
-                BundleOptions = BundleOptions.Default,
                 Scripts =
                 [
                     $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uactivitypub.dashboard.controller.js"
