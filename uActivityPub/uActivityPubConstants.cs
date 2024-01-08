@@ -18,6 +18,6 @@ public static class uActivityPubConstants
         /// <summary>
         ///  Virtual path to the plugin files
         /// </summary>
-        public const string PluginPath = "~/App_Plugins/uActivityPub";
+        public const string PluginPath = "/App_Plugins/uActivityPub";
     }
 }

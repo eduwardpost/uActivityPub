@@ -12,7 +12,7 @@ using Umbraco.Extensions;
 
 namespace uActivityPub.Expansions;
 
-[Tree("settings", uActivityPubConstants.Package.TreeName, TreeTitle = uActivityPubConstants.Package.Name, TreeGroup = uActivityPubConstants.Package.Name, SortOrder = 35)]
+[Tree("settings", uActivityPubConstants.Package.TreeName, TreeTitle = uActivityPubConstants.Package.Name, TreeGroup = uActivityPubConstants.Package.Name, SortOrder = 5)]
 [PluginController(uActivityPubConstants.Package.Name)]
 public class SettingsTreeController(
     ILocalizedTextService localizedTextService,
