@@ -2,7 +2,7 @@
 
 This package allows you to hook your umbraco website into the fediverse.
 
-Currently there are no settings since the package got developed as a proof of concept for my own blog.
+Currently the settings or only settable in the database, you can however view them in the umbraco backoffice
 The current roadmap is to extend this package with some settings, then harden it for edge cases.
 
 
