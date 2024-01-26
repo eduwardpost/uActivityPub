@@ -39,7 +39,7 @@ public class UActivityPubComposer : IComposer
         options.AddPolicy(SyncAuthorizationPolicies.TreeAccessUActivityPub, policy =>
         {
             policy.AuthenticationSchemes.Add(backofficeAuthenticationScheme);
-            policy.Requirements.Add(new TreeRequirement("uActivityPubAlias"));
+            policy.Requirements.Add(new TreeRequirement(uActivityPubConstants.Package.TreeName));
         });
     }
 }

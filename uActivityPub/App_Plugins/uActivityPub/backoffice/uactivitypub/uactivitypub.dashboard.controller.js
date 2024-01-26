@@ -1,11 +1,43 @@
-(function () {
+﻿(function () {
     'use strict';
 
-    function dashboardController($controller, $scope, $timeout, navigationService, eventsService) {
+    function dashboardController($controller, $scope, $http, $timeout, navigationService, eventsService, notificationsService) {
+        $scope.loaded = false;
 
         var vm = this;
+        
+        vm.settings = {
+            singleUserMode: false,
+            singleUserModeUserName: '',
+            contentTypeAlias: '',
+            listContentTypeAlias: '',
+            authorName: ''
+        };
+        
+        function loadSettings () {
+            var url = Umbraco.Sys.ServerVariables.uActivityPub.uActivityPubService;
 
-        //var _settingsFolder = Umbraco.Sys.ServerVariables.umbracoSettings.appPluginsPath + '/uActivityPub/settings';
+            $http({
+                method: 'get',
+                url: url + 'getsettings'
+            }).then(function successCallback(response) {
+                console.log(response.data);
+                
+                vm.settings.singleUserMode = (response.data.find((setting) => setting.Key === 'singleUserMode').Value === "true")
+                vm.settings.singleUserModeUserName = response.data.find((setting) => setting.Key === 'singleUserModeUserName').Value
+                vm.settings.contentTypeAlias = response.data.find((setting) => setting.Key === 'contentTypeAlias').Value
+                vm.settings.listContentTypeAlias = response.data.find((setting) => setting.Key === 'listContentTypeAlias').Value
+                vm.settings.authorName = response.data.find((setting) => setting.Key === 'authorName').Value
+                
+                console.log(vm.settings);
+                $scope.loaded = true;
+            }, function errorCallback(response) {
+                notificationsService.error("Error", "Spelers toevoegen mislukt: " + response.status);
+            });
+        }
+        
+        
+       
 
         vm.selectNavigationItem = function (item) {
             eventsService.emit('uactivitypub-dashboard.tab.change', item);
@@ -13,34 +45,20 @@
 
         vm.page = {
             title: 'uActivityPub',
-            description: '...',
-            navigation: [ ]
+            description: 'Settings for the uActivityPub package',
+            navigation: []
         };
-
-        // var uSyncSettings = Umbraco.Sys.ServerVariables.uSync;
-
-        // if (!uSyncSettings.disabledDashboard) {
-        //     vm.page.navigation.push({
-        //         'name': 'uActivityPub',
-        //         'alias': 'uActivityPub',
-        //         'icon': 'icon-mastodon-fill',
-        //         'view': _settingsFolder + '/default.html',
-        //         'active': true
-        //     });
-        // }
-
-        // vm.page.navigation.push({
-        //     'name': 'Settings',
-        //     'alias': 'settings',
-        //     'icon': 'icon-settings',
-        //     'view': _settingsFolder + '/settings.html',
-        // });
 
 
         $timeout(function () {
-            navigationService.syncTree({ tree: "uActivityPub", path: "-1" });
+            navigationService.syncTree({tree: "uActivityPub", path: "-1"});
         });
+
+        
+        loadSettings();
+        
     }
+    
 
     angular.module('umbraco')
         .controller('uActivityPubSettingsDashboardController', dashboardController);

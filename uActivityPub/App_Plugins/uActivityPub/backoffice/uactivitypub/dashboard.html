@@ -12,6 +12,67 @@
         </umb-editor-header>
         <umb-editor-container class="form-horizontal">
             <umb-editor-sub-views sub-views="vm.page.navigation" model="vm"></umb-editor-sub-views>
+            <umb-box ng-if="loaded">
+                <umb-box-header title="Settings" description="Controls how uActivityPub behaves">
+                </umb-box-header>
+                <umb-box-content>
+                    
+                    <div class="umb-permission uActivityPub-setting-value">
+                        <div class="umb-permission__content">
+                            <div>Is in single user mode</div>
+                            <div class="umb-permission__description">If true uActivityPub will act as it's a single user instead of each user their own.</div>
+                        </div>
+                        <div class="umb-permission__value">
+                            {{vm.settings.singleUserMode}}
+                        </div>
+                    </div>
+
+                    <div class="umb-permission uActivityPub-setting-value">
+                        <div class="umb-permission__content">
+                            <div>Single user mode user name</div>
+                            <div class="umb-permission__description">The user name uActivityPub will use when in single user mode.</div>
+                        </div>
+                        <div class="umb-permission__value">
+                            {{vm.settings.singleUserModeUserName}}
+                        </div>
+                    </div>
+
+                    <div class="umb-permission uActivityPub-setting-value">
+                        <div class="umb-permission__content">
+                            <div>Content type alias</div>
+                            <div class="umb-permission__description">The alias of the content type uActivityPub watches to make posts about.</div>
+                        </div>
+                        <div class="umb-permission__value">
+                            {{vm.settings.contentTypeAlias}}
+                        </div>
+                    </div>
+
+                    <div class="umb-permission uActivityPub-setting-value">
+                        <div class="umb-permission__content">
+                            <div>List content type alias</div>
+                            <div class="umb-permission__description">The alias of the content type uActivityPub watches to list historical posts.</div>
+                        </div>
+                        <div class="umb-permission__value">
+                            {{vm.settings.listContentTypeAlias}}
+                        </div>
+                    </div>
+
+                    <div class="umb-permission uActivityPub-setting-value">
+                        <div class="umb-permission__content">
+                            <div>Author name alias</div>
+                            <div class="umb-permission__description">The alias of the author field uActivityPub uses to determine the author when not in single user mode.</div>
+                        </div>
+                        <div class="umb-permission__value">
+                            {{vm.settings.authorName}}
+                        </div>
+                    </div>
+                    
+                    
+                    <umb-button look="primary" label="Save" ng-click="getSettings()"></umb-button>    
+                </umb-box-content>
+                    
+            </umb-box>
+            
         </umb-editor-container>
     </umb-editor-view>
 </div>

@@ -1,0 +1,21 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <uActivityPubContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\uActivityPub\**\*.*</uActivityPubContentFilesPath>
+    </PropertyGroup>
+    
+    <Target Name="CopyuActivityPubAssets" BeforeTargets="BeforeBuild">
+        <ItemGroup>
+            <uActivityPubPackageContentFiles Include="$(uActivityPubContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying uActivityPub files: $(uActivityPubContentFilesPath) - #@(uActivityPubPackageContentFiles->Count()) files" Importance="high" />
+        <Copy SourceFiles="@(uActivityPubPackageContentFiles)" DestinationFiles="@(uActivityPubPackageContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\uActivityPub\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    </Target>
+
+    <Target Name="ClearuActivityPubAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <uActivityPubDir Include="$(MSBuildProjectDirectory)\App_Plugins\uActivityPub\" />
+        </ItemGroup>
+        <Message Text="Clear old uActivityPub data" Importance="high" />
+        <RemoveDir Directories="@(uActivityPubDir)" />
+    </Target>
+</Project>

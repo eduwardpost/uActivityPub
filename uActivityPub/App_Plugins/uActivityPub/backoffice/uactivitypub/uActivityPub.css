@@ -1,0 +1,17 @@
+.uActivityPub-setting-value {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid #e9e9eb;
+    padding-bottom: 0.5em;
+}
+
+.uActivityPub-setting-value .umb-permission__value {
+    flex-basis: 20%;
+    text-align: right;
+    font-weight: 700;
+}
+
+.uActivityPub-setting-value:last-child {
+    border-bottom: none;
+}
