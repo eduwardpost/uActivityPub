@@ -78,6 +78,11 @@ jobs:
     # Requires the build job results
     needs: test
     runs-on: ubuntu-latest
+
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
     steps:
     - name: Download artifact
       uses: actions/download-artifact@v3
