@@ -1,4 +1,5 @@
-# uActivityPub [![NuGet Version](http://img.shields.io/nuget/v/uActivityPub.svg?style=flat)](https://www.nuget.org/packages/uActivityPub/) [![NuGet Downloads](https://img.shields.io/nuget/dt/uActivityPub.svg)](https://www.nuget.org/packages/uActivityPub/)
+# uActivityPub [![NuGet Version](http://img.shields.io/nuget/v/uActivityPub.svg?style=flat)](https://www.nuget.org/packages/uActivityPub/) [![NuGet Downloads](https://img.shields.io/nuget/dt/uActivityPub.svg)](https://www.nuget.org/packages/uActivityPub/) [![GitHub License](https://img.shields.io/github/license/eduwardpost/uActivityPub)](https://github.com/eduwardpost/uActivityPub)
+
 
 This package allows you to hook your umbraco website into the fediverse.
 
