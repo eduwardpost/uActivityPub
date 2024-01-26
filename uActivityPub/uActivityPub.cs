@@ -45,10 +45,10 @@ public static class USyncStaticAssetsExtensions
                 [
                     $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uactivitypub.dashboard.controller.js"
                 ],
-                // Stylesheets = new[]
-                // {
-                //     $"{uSyncConstants.Package.PluginPath}/uactivitypub.{version}.min.css"
-                // }
+                Stylesheets =
+                [
+                    $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uActivityPub.css"
+                ]
             });
         }
     }
