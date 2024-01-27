@@ -11,30 +11,18 @@ using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Services;
 
-public class InboxService : IInboxService
+public class InboxService(
+    IUmbracoDatabaseFactory databaseFactory,
+    IOptions<WebRoutingSettings> webRoutingSettings,
+    ISignatureService signatureService,
+    ISingedRequestHandler singedRequestHandler)
+    : IInboxService
 {
-    private readonly IUmbracoDatabaseFactory _databaseFactory;
-    private readonly IOptions<WebRoutingSettings> _webRoutingSettings;
-    private readonly ISignatureService _signatureService;
-    private readonly ISingedRequestHandler _singedRequestHandler;
-
-    public InboxService(
-        IUmbracoDatabaseFactory  databaseFactory, 
-        IOptions<WebRoutingSettings> webRoutingSettings,
-        ISignatureService signatureService,
-        ISingedRequestHandler singedRequestHandler)
-    {
-        _databaseFactory = databaseFactory;
-        _webRoutingSettings = webRoutingSettings;
-        _signatureService = signatureService;
-        _singedRequestHandler = singedRequestHandler;
-    }
-    
-    public async Task<Activity?> HandleFollow(Activity activity, string signature, IUser user)
+    public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
         Log.Information("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
         //todo 1. Check if valid (optional for now)
-        var actor = await _signatureService.GetActor(activity.Actor);
+        var actor = await signatureService.GetActor(activity.Actor);
         
         if (actor == null)
             return null;
@@ -49,7 +37,7 @@ public class InboxService : IInboxService
         }
         
         //2. Check if already known
-        using var database = _databaseFactory.CreateDatabase();
+        using var database = databaseFactory.CreateDatabase();
         var follow = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1", "Follow", activity.Actor);
 
         if (follow != null)
@@ -68,14 +56,15 @@ public class InboxService : IInboxService
         //4. Create response
         var responseActivity =  new Activity
         {
-            Id = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{user.ActivityPubUserName()}/{activity.Type}/{receivedActivity.Id}",
+            Id = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}/{activity.Type}/{receivedActivity.Id}",
             Type = "Accept",
             Actor = activity.Object as string ?? string.Empty,
             Object = activity
         };
-        var keyInfo = await _signatureService.GetPrimaryKeyForUser(user);
+        
+        var keyInfo = await signatureService.GetPrimaryKeyForUser(userName, userId);
 
-        var response = await _singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, new JsonSerializerOptions()
+        var response = await singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, new JsonSerializerOptions
         {
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -99,7 +88,7 @@ public class InboxService : IInboxService
             throw new InvalidOperationException($"Can't undo {undoObject?.Type} at this time");
         
         //It's an unfollow request
-        using var database = _databaseFactory.CreateDatabase();
+        using var database = databaseFactory.CreateDatabase();
         var follow = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1", "Follow", undoObject.Actor);
 
         if (follow == null)

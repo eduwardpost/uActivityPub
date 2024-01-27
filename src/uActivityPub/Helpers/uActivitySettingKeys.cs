@@ -9,4 +9,5 @@ public static class uActivitySettingKeys
     public const string ContentTypeAlias = "contentTypeAlias";
     public const string ListContentTypeAlias = "listContentTypeAlias";
     public const string UserNameContentAlias = "authorName";
+    public const int SingleUserModeUserId = -99;
 }

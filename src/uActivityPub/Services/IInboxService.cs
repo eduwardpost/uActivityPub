@@ -5,6 +5,6 @@ namespace uActivityPub.Services;
 
 public interface IInboxService
 {
-    Task<Activity?> HandleFollow(Activity activity, string signature, IUser user);
+    Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId);
     Task<Activity?> HandleUndo(Activity activity, string signature);
 }

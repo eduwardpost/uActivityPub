@@ -8,7 +8,6 @@ using uActivityPub.Data;
 using uActivityPub.Models;
 using uActivityPub.Services;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Tests.ServiceTests;
@@ -19,7 +18,7 @@ public class SignatureServiceTests
 
     #region testRSA
     //randomly generated keypair that is not used elsewhere
-    private const string testPrivateKeyPem = @"-----BEGIN RSA PRIVATE KEY-----
+    private const string TestPrivateKeyPem = @"-----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEA1CUZkCH8QIXroxDE2NapFlf3QGwrTEqmQSJGTqfBawGSDhBW
 mwd1OSv7DxWour9lxUsLOLBc299H6aKzYGduJON+V255i6wIvzrK23q36DduNnF5
 aY48MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9S
@@ -47,7 +46,7 @@ lcf8PH1Ab97GcvLig++zlGVo0PbSiZ4r1X0v7dKnDgbEQdhzd13ooDdv97TfzdsI
 aGw+fVn4z0e0N//l7HJ8s3U1sSjWa4dhnCfgqIz+cw7E7E1WTWRKqSY=
 -----END RSA PRIVATE KEY-----";
 
-    private const string testPublicKeyPem = @"-----BEGIN RSA PUBLIC KEY-----
+    private const string TestPublicKeyPem = @"-----BEGIN RSA PUBLIC KEY-----
 MIIBCgKCAQEA1CUZkCH8QIXroxDE2NapFlf3QGwrTEqmQSJGTqfBawGSDhBWmwd1
 OSv7DxWour9lxUsLOLBc299H6aKzYGduJON+V255i6wIvzrK23q36DduNnF5aY48
 MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
@@ -56,7 +55,6 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
 4Pgab2RKk85eVZZkDpLsl3pBHUatlL7J5wIDAQAB
 -----END RSA PUBLIC KEY-----";
     #endregion
-
 
     public SignatureServiceTests()
     {
@@ -100,7 +98,7 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
 
         //Assert
         Assert.NotNull(retrievedActor);
-        Assert.Equal(actorString, retrievedActor?.Id);
+        Assert.Equal(actorString, retrievedActor.Id);
     }
     
     [Fact]
@@ -141,25 +139,17 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
         var databaseMock = new Mock<IUmbracoDatabase>();
         var httpClientFactoryMock = new Mock<IHttpClientFactory>();
 
-        var userKeySchema = new UserKeysSchema()
+        var userKeySchema = new UserKeysSchema
         {
             Id = 2,
-            PrivateKey = testPrivateKeyPem,
-            PublicKey = testPublicKeyPem
+            PrivateKey = TestPrivateKeyPem,
+            PublicKey = TestPublicKeyPem
         };
         
-        var userMock = new Mock<IUser>();
-        userMock.Setup(x => x.Id)
-            .Returns(1);
-        userMock.Setup(x => x.Name)
-            .Returns("testuser");
-
         databaseFactoryMock.Setup(x => x.CreateDatabase())
             .Returns(databaseMock.Object);
         databaseMock.Setup(x => x.FirstOrDefaultAsync<UserKeysSchema>(It.IsAny<string>(), 1))
             .ReturnsAsync(userKeySchema);
-        
-        
         
 
         var unitUnderTest = new SignatureService(
@@ -168,14 +158,14 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
             _webRouterSettingsMock.Object);
 
         //Act
-        var keyPairTuple = await unitUnderTest.GetPrimaryKeyForUser(userMock.Object);
+        var keyPairTuple = await unitUnderTest.GetPrimaryKeyForUser("test-user", 1);
 
 
         //Assert
         Assert.NotNull(keyPairTuple.KeyId);
-        Assert.Equal(testPrivateKeyPem.Replace("\r\n", "\n"), keyPairTuple.Rsa.ExportRSAPrivateKeyPem());
-        Assert.Equal(testPublicKeyPem.Replace("\r\n", "\n"), keyPairTuple.Rsa.ExportRSAPublicKeyPem());
-        Assert.Contains("activitypub/actor/testuser", keyPairTuple.KeyId);
+        Assert.Equal(TestPrivateKeyPem.Replace("\r\n", "\n"), keyPairTuple.Rsa.ExportRSAPrivateKeyPem());
+        Assert.Equal(TestPublicKeyPem.Replace("\r\n", "\n"), keyPairTuple.Rsa.ExportRSAPublicKeyPem());
+        Assert.Contains("activitypub/actor/test-user", keyPairTuple.KeyId);
     }
     
     [Fact]
@@ -185,19 +175,6 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
         var databaseFactoryMock = new Mock<IUmbracoDatabaseFactory>();
         var databaseMock = new Mock<IUmbracoDatabase>();
         var httpClientFactoryMock = new Mock<IHttpClientFactory>();
-
-        var userKeySchema = new UserKeysSchema()
-        {
-            Id = 2,
-            PrivateKey = testPrivateKeyPem,
-            PublicKey = testPublicKeyPem
-        };
-        
-        var userMock = new Mock<IUser>();
-        userMock.Setup(x => x.Id)
-            .Returns(1);
-        userMock.Setup(x => x.Name)
-            .Returns("testuser");
 
         databaseFactoryMock.Setup(x => x.CreateDatabase())
             .Returns(databaseMock.Object);
@@ -210,14 +187,14 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
             _webRouterSettingsMock.Object);
 
         //Act
-        var keyPairTuple = await unitUnderTest.GetPrimaryKeyForUser(userMock.Object);
+        var keyPairTuple = await unitUnderTest.GetPrimaryKeyForUser("test-user", 1);
 
 
         //Assert
         Assert.NotNull(keyPairTuple.KeyId);
         Assert.False(string.IsNullOrEmpty(keyPairTuple.Rsa.ExportRSAPrivateKeyPem()));
         Assert.False(string.IsNullOrEmpty(keyPairTuple.Rsa.ExportRSAPublicKeyPem()));
-        Assert.Contains("activitypub/actor/testuser", keyPairTuple.KeyId);
+        Assert.Contains("activitypub/actor/test-user", keyPairTuple.KeyId);
         databaseMock.Verify(x => x.Insert(It.IsAny<UserKeysSchema>()), Times.Once);
     }
 }
