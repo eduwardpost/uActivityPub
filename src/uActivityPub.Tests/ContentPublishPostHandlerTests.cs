@@ -6,8 +6,11 @@ using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
 using uActivityPub.Data;
+using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Tests.HelperTests;
+using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
@@ -39,11 +42,11 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
-        
-        
+
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -134,10 +137,10 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
-        
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -235,11 +238,11 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-                    .Returns(uActivitySettingsHelper.GetSettings);
-        
-        
+            .Returns(uActivitySettingsHelper.GetSettings);
+
+
         contentTypeMock.Setup(x => x.Alias).Returns("nonArticle");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
 
@@ -278,10 +281,10 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
-        
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -329,30 +332,20 @@ public class ContentPublishPostHandlerTests
     }
 
     [Fact]
-    public void HandlePostsToFollowersForNotFoundUserThrowsInvalidOperation()
+    public void HandlePostsToFollowersForNotFoundContentAliasSettingThrowsInvalidOperation()
     {
         //Arrange
 
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
-        blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
-        blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
-            .Returns(1);
 
 
         var databaseFactoryMock = new Mock<IUmbracoDatabaseFactory>();
         var databaseMock = new Mock<IUmbracoDatabase>();
-        databaseFactoryMock.Setup(x => x.CreateDatabase())
-            .Returns(databaseMock.Object);
-
-        databaseMock.Setup(x => x.Query<ReceivedActivitiesSchema>(It.IsAny<string>(), "Post", It.IsAny<string>()))
-            .Returns(new List<ReceivedActivitiesSchema>());
         var userServiceMock = new Mock<IUserService>();
-
-
         var signatureServiceMock = new Mock<ISignatureService>();
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
         var activityHelperMock = new Mock<IActivityHelper>();
@@ -361,22 +354,79 @@ public class ContentPublishPostHandlerTests
         var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
             userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
             activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
-        
+
         try
         {
             //Act
             unitUnderTest.Handle(notification);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             //Assert
             Assert.IsType<InvalidOperationException>(e);
-            databaseMock.Verify(x => x.Insert("receivedActivityPubActivities", "Id", true, It.IsAny<ReceivedActivitiesSchema>()), Times.Never);
-            singedRequestHandlerMock.Verify(x => x.SendSingedPost(It.IsAny<Uri>(), It.IsAny<RSA>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            databaseMock.Verify(
+                x => x.Insert("receivedActivityPubActivities", "Id", true, It.IsAny<ReceivedActivitiesSchema>()),
+                Times.Never);
+            singedRequestHandlerMock.Verify(
+                x => x.SendSingedPost(It.IsAny<Uri>(), It.IsAny<RSA>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never);
         }
     }
-    
-     [Fact]
+
+    [Fact]
+    public void HandlePostsToFollowersForNotFoundUserThrowsInvalidOperation()
+    {
+        //Arrange
+
+        var blogPostMock = new Mock<IContent>();
+        var contentTypeMock = new Mock<ISimpleContentType>();
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(new List<uActivitySettings>
+            {
+                new()
+                {
+                    Id = 1,
+                    Key = uActivitySettingKeys.ContentTypeAlias,
+                    Value = "unit"
+                }
+            });
+
+        contentTypeMock.Setup(x => x.Alias).Returns("article");
+        blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
+
+
+        var databaseFactoryMock = new Mock<IUmbracoDatabaseFactory>();
+        var databaseMock = new Mock<IUmbracoDatabase>();
+        var userServiceMock = new Mock<IUserService>();
+        var signatureServiceMock = new Mock<ISignatureService>();
+        var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
+        var activityHelperMock = new Mock<IActivityHelper>();
+        var notification = new ContentPublishedNotification(blogPostMock.Object, null!);
+
+        var unitUnderTest = new ContentPublishPostHandler(databaseFactoryMock.Object, _webRouterSettingsMock.Object,
+            userServiceMock.Object, signatureServiceMock.Object, singedRequestHandlerMock.Object,
+            activityHelperMock.Object, iUActivitySettingsServiceMock.Object);
+
+        try
+        {
+            //Act
+            unitUnderTest.Handle(notification);
+        }
+        catch (Exception e)
+        {
+            //Assert
+            Assert.IsType<InvalidOperationException>(e);
+            databaseMock.Verify(
+                x => x.Insert("receivedActivityPubActivities", "Id", true, It.IsAny<ReceivedActivitiesSchema>()),
+                Times.Never);
+            singedRequestHandlerMock.Verify(
+                x => x.SendSingedPost(It.IsAny<Uri>(), It.IsAny<RSA>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never);
+        }
+    }
+
+    [Fact]
     public void HandlePostsToFollowersDoesNotCrashIfActorNoLongerExists()
     {
         //Arrange
@@ -384,10 +434,10 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
-        
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -425,12 +475,12 @@ public class ContentPublishPostHandlerTests
 
         var signatureServiceMock = new Mock<ISignatureService>();
         signatureServiceMock.Setup(x => x.GetActor(It.IsAny<string>()))
-            .ReturnsAsync((Actor) null!);
+            .ReturnsAsync((Actor)null!);
 
         signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser(userMock.Object))
             .ReturnsAsync(("key", RSA.Create(2048)));
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
-      
+
         var activityHelperMock = new Mock<IActivityHelper>();
 
         var activity = new Activity
@@ -462,8 +512,8 @@ public class ContentPublishPostHandlerTests
             x => x.SendSingedPost(It.IsAny<Uri>(), It.IsAny<RSA>(), It.IsAny<string>(), It.IsAny<string>()),
             Times.Never);
     }
-    
-     [Fact]
+
+    [Fact]
     public void HandlePostsToFollowersDoesNotCrashIfRequestFails()
     {
         //Arrange
@@ -471,10 +521,10 @@ public class ContentPublishPostHandlerTests
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
-        
+
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
-        
+
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))

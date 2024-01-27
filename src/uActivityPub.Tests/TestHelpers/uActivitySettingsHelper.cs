@@ -2,7 +2,7 @@
 using uActivityPub.Data;
 using uActivityPub.Helpers;
 
-namespace uActivityPub.Tests;
+namespace uActivityPub.Tests.TestHelpers;
 
 public static class uActivitySettingsHelper
 {

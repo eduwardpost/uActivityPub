@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using uActivityPub.Data;
-using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Tests.HelperTests;
+using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Services;
 
-namespace uActivityPub.Tests;
+namespace uActivityPub.Tests.ServiceTests;
 
 public class OutboxServiceTests
 {

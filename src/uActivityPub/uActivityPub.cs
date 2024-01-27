@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Manifest;
 
 namespace uActivityPub;
 
+[ExcludeFromCodeCoverage]
 public class StaticAssetsBoot : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
@@ -12,6 +14,7 @@ public class StaticAssetsBoot : IComposer
     }
 }
 
+[ExcludeFromCodeCoverage]
 public static class USyncStaticAssetsExtensions
 {
     // ReSharper disable once UnusedMethodReturnValue.Global

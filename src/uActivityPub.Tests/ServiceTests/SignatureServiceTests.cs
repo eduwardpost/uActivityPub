@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using RichardSzalay.MockHttp;
 using uActivityPub.Data;
-using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Persistence;
 
-namespace uActivityPub.Tests;
+namespace uActivityPub.Tests.ServiceTests;
 
 public class SignatureServiceTests
 {

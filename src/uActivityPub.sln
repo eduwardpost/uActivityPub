@@ -9,9 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uActivityPub.Tests", "uActi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{3EF6B8E5-E1D0-4BF1-8A1B-4499215FDDBD}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
-		.github\workflows\create-release.yml = .github\workflows\create-release.yml
-		.github\release.yml = .github\release.yml
+		..\.github\workflows\publish-nuget.yml = ..\.github\workflows\publish-nuget.yml
+		..\.github\workflows\publish-documentation.yml = ..\.github\workflows\publish-documentation.yml
+		..\.github\workflows\create-release.yml = ..\.github\workflows\create-release.yml
+		..\.github\release.yml = ..\.github\release.yml
 	EndProjectSection
 EndProject
 Global
