@@ -2,11 +2,9 @@
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
 using uActivityPub.Services;
-using uActivityPub.Tests.HelperTests;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Services;
 
 namespace uActivityPub.Tests.ServiceTests;
@@ -37,8 +35,6 @@ public class OutboxServiceTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
         
-        var userMock = new Mock<IUser>();
-
         var rootContentMock = new Mock<IContent>();
         rootContentMock.Setup(x => x.Id)
             .Returns(1);
@@ -91,12 +87,12 @@ public class OutboxServiceTests
             iUActivitySettingsServiceMock.Object);
 
         //Act
-        var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
+        var outbox = unitUnderTest.GetPublicOutbox("uActivityPub");
 
         //Assert
         Assert.NotNull(outbox);
-        Assert.Single(outbox?.Items!);
-        Assert.Contains("https://www.w3.org/ns/activitystreams", outbox?.Context!);
+        Assert.Single(outbox.Items);
+        Assert.Contains("https://www.w3.org/ns/activitystreams", outbox.Context);
         activityHelperMock.Verify(x => x.GetActivityFromContent(It.IsAny<IContent>(), It.IsAny<string>()), Times.Once);
     }
     
@@ -106,7 +102,6 @@ public class OutboxServiceTests
         //Arrange
         var contentServiceMock = new Mock<IContentService>();
         var activityHelperMock = new Mock<IActivityHelper>();
-        var userMock = new Mock<IUser>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
         
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
@@ -122,7 +117,7 @@ public class OutboxServiceTests
             iUActivitySettingsServiceMock.Object);
 
         //Act
-        var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
+        var outbox = unitUnderTest.GetPublicOutbox("uActivityPub");
 
         //Assert
         Assert.Null(outbox);
@@ -134,7 +129,6 @@ public class OutboxServiceTests
         //Arrange
         var contentServiceMock = new Mock<IContentService>();
         var activityHelperMock = new Mock<IActivityHelper>();
-        var userMock = new Mock<IUser>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
         
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
@@ -162,7 +156,7 @@ public class OutboxServiceTests
             iUActivitySettingsServiceMock.Object);
 
         //Act
-        var outbox = unitUnderTest.GetPublicOutbox(userMock.Object);
+        var outbox = unitUnderTest.GetPublicOutbox("uActivityPub");
 
         //Assert
         Assert.Null(outbox);

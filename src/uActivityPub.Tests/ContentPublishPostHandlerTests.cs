@@ -9,7 +9,6 @@ using uActivityPub.Data;
 using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
-using uActivityPub.Tests.HelperTests;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
@@ -38,7 +37,6 @@ public class ContentPublishPostHandlerTests
     public void HandlePostsToFollowers()
     {
         //Arrange
-
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
@@ -46,6 +44,13 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
 
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
+                    .Returns(new uActivitySettings
+                    {
+                        Id = 4,
+                        Key = uActivitySettingKeys.SingleUserMode,
+                        Value = "false"
+                    });
 
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
@@ -65,7 +70,7 @@ public class ContentPublishPostHandlerTests
             {
                 new()
                 {
-                    Actor = "testactor",
+                    Actor = "test-actor",
                     Object = "",
                     Type = "Follow",
                     Id = 1
@@ -90,7 +95,7 @@ public class ContentPublishPostHandlerTests
                 Inbox = "http://localhost/inbox"
             });
 
-        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser(userMock.Object))
+        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser("uActivityPub", 1))
             .ReturnsAsync(("key", RSA.Create(2048)));
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
         singedRequestHandlerMock.Setup(x =>
@@ -133,13 +138,20 @@ public class ContentPublishPostHandlerTests
     public void HandlePostsToMultipleFollowers()
     {
         //Arrange
-
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
+
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
+            .Returns(new uActivitySettings
+            {
+                Id = 4,
+                Key = uActivitySettingKeys.SingleUserMode,
+                Value = "false"
+            });
 
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
@@ -159,14 +171,14 @@ public class ContentPublishPostHandlerTests
             {
                 new()
                 {
-                    Actor = "testactor",
+                    Actor = "test-actor",
                     Object = "",
                     Type = "Follow",
                     Id = 1
                 },
                 new()
                 {
-                    Actor = "testactor2",
+                    Actor = "test-actor2",
                     Object = "",
                     Type = "Follow",
                     Id = 2
@@ -191,7 +203,7 @@ public class ContentPublishPostHandlerTests
                 Inbox = "http://localhost/inbox"
             });
 
-        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser(userMock.Object))
+        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser("uActivityPub", 1))
             .ReturnsAsync(("key", RSA.Create(2048)));
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
         singedRequestHandlerMock.Setup(x =>
@@ -277,7 +289,6 @@ public class ContentPublishPostHandlerTests
     public void HandlePostsToFollowersWithAlreadyPostedArticle()
     {
         //Arrange
-
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
@@ -301,7 +312,7 @@ public class ContentPublishPostHandlerTests
             {
                 new()
                 {
-                    Actor = "testactor",
+                    Actor = "test-actor",
                     Object = "",
                     Type = "Post",
                     Id = 1
@@ -335,7 +346,6 @@ public class ContentPublishPostHandlerTests
     public void HandlePostsToFollowersForNotFoundContentAliasSettingThrowsInvalidOperation()
     {
         //Arrange
-
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
@@ -438,6 +448,14 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
 
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
+            .Returns(new uActivitySettings
+            {
+                Id = 4,
+                Key = uActivitySettingKeys.SingleUserMode,
+                Value = "false"
+            });
+        
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
         blogPostMock.Setup(x => x.GetValue<int>("authorName", null, null, false))
@@ -456,7 +474,7 @@ public class ContentPublishPostHandlerTests
             {
                 new()
                 {
-                    Actor = "testactor",
+                    Actor = "test-actor",
                     Object = "",
                     Type = "Follow",
                     Id = 1
@@ -477,7 +495,7 @@ public class ContentPublishPostHandlerTests
         signatureServiceMock.Setup(x => x.GetActor(It.IsAny<string>()))
             .ReturnsAsync((Actor)null!);
 
-        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser(userMock.Object))
+        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser("uActivityPub", 1))
             .ReturnsAsync(("key", RSA.Create(2048)));
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
 
@@ -517,13 +535,20 @@ public class ContentPublishPostHandlerTests
     public void HandlePostsToFollowersDoesNotCrashIfRequestFails()
     {
         //Arrange
-
         var blogPostMock = new Mock<IContent>();
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(uActivitySettingsHelper.GetSettings);
+        
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
+            .Returns(new uActivitySettings
+            {
+                Id = 4,
+                Key = uActivitySettingKeys.SingleUserMode,
+                Value = "false"
+            });
 
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
@@ -543,7 +568,7 @@ public class ContentPublishPostHandlerTests
             {
                 new()
                 {
-                    Actor = "testactor",
+                    Actor = "test-actor",
                     Object = "",
                     Type = "Follow",
                     Id = 1
@@ -568,7 +593,7 @@ public class ContentPublishPostHandlerTests
                 Inbox = "http://localhost/inbox"
             });
 
-        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser(userMock.Object))
+        signatureServiceMock.Setup(x => x.GetPrimaryKeyForUser("uActivityPub", 1))
             .ReturnsAsync(("key", RSA.Create(2048)));
         var singedRequestHandlerMock = new Mock<ISingedRequestHandler>();
         singedRequestHandlerMock.Setup(x =>

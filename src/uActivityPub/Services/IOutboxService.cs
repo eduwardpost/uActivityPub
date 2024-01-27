@@ -5,5 +5,5 @@ namespace uActivityPub.Services;
 
 public interface IOutboxService
 {
-    OrderedCollection<Activity>? GetPublicOutbox(IUser user);
+    OrderedCollection<Activity>? GetPublicOutbox(string userName);
 }

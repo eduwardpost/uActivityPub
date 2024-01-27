@@ -25,6 +25,9 @@ public class Actor : ActivityPubBase
     
     public PublicKey? PublicKey { get; set; }
     
+    /// <summary>
+    /// Create an empty actor
+    /// </summary>
     public Actor()
     {
         Type = "Person";
@@ -35,6 +38,12 @@ public class Actor : ActivityPubBase
         };
     }
 
+    /// <summary>
+    /// Create an actor for uActivityPub in multi user mode
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="webRoutingSettings"></param>
+    /// <param name="scopeProvider"></param>
     public Actor(IUser user, IOptions<WebRoutingSettings> webRoutingSettings, IScopeProvider scopeProvider) : this()
     {
         PreferredUsername = user.ActivityPubUserName() ?? user.Id.ToString();
@@ -58,6 +67,52 @@ public class Actor : ActivityPubBase
             userKey = new UserKeysSchema
             {
                 Id = user.Id,
+                PublicKey = rsa.ExportRSAPublicKeyPem(),
+                PrivateKey = rsa.ExportRSAPrivateKeyPem()
+            };
+
+            scope.Database.Insert(userKey);
+        }
+       
+        
+        PublicKey = new PublicKey
+        {
+            Id = $"{Id}#main-key",
+            Owner = Id,
+            PublicKeyPem = userKey.PublicKey
+        };
+        
+        scope.Complete();
+    }
+    
+    /// <summary>
+    /// Create an actor for uActivityPub in single user mode
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="webRoutingSettings"></param>
+    /// <param name="scopeProvider"></param>
+    public Actor(string userName, IOptions<WebRoutingSettings> webRoutingSettings, IScopeProvider scopeProvider) : this()
+    {
+        Id = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}";
+        Inbox = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/inbox/{userName}";
+        Outbox = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/outbox/{userName}";
+        Followers = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}/followers";
+        Icon = new Icon
+        {
+            Url = userName.GetGravatarUrl() //todo get url to avatar if custom uploaded
+        };
+
+        using var scope = scopeProvider.CreateScope();
+        
+        var userKey = scope.Database.FirstOrDefault<UserKeysSchema>("SELECT * FROM userKeys WHERE UserId = @0", uActivitySettingKeys.SingleUserModeUserId);
+        if (userKey == null)
+        {
+            //user does not have pub private key yet, lets make a pair
+            var rsa = RSA.Create(2048);
+
+            userKey = new UserKeysSchema
+            {
+                Id = uActivitySettingKeys.SingleUserModeUserId,
                 PublicKey = rsa.ExportRSAPublicKeyPem(),
                 PrivateKey = rsa.ExportRSAPrivateKeyPem()
             };

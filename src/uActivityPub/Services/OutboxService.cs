@@ -23,7 +23,7 @@ public class OutboxService : IOutboxService
         _webRoutingSettings = webRoutingSettings;
     }
 
-    public OrderedCollection<Activity>? GetPublicOutbox(IUser user)
+    public OrderedCollection<Activity>? GetPublicOutbox(string userName)
     {
         var settings = _uActivitySettingsService.GetAllSettings();
         var contentListAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ListContentTypeAlias);
@@ -48,7 +48,7 @@ public class OutboxService : IOutboxService
 
         var outbox = new OrderedCollection<Activity>();
 
-        var actor = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{user.ActivityPubUserName()}";
+        var actor = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}";
 
 
         foreach (var blogItem in blogItems)

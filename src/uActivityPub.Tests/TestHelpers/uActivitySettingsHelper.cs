@@ -36,7 +36,7 @@ public static class uActivitySettingsHelper
          },
          new uActivitySettings
          {
-            Id = 4,
+            Id = 5,
             Key = uActivitySettingKeys.SingleUserModeUserName,
             Value = "uActivityPub"
          }
