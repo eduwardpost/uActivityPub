@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using uActivityPub.Authorization;
@@ -15,6 +16,7 @@ using Umbraco.Cms.Web.BackOffice.Authorization;
 namespace uActivityPub.Composers;
 
 // ReSharper disable once UnusedType.Global
+[ExcludeFromCodeCoverage]
 public class UActivityPubComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)

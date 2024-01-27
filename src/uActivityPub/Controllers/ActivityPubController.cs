@@ -13,42 +13,41 @@ namespace uActivityPub.Controllers;
 
 [Route("/activitypub")]
 
-public class ActivityPubController : UmbracoApiController
+public class ActivityPubController(
+    IUserService userService,
+    IInboxService inboxService,
+    IOutboxService outboxService,
+    IOptions<WebRoutingSettings> webRoutingSettings,
+    IScopeProvider scopeProvider,
+    IUActivitySettingsService uActivitySettingsService)
+    : UmbracoApiController
 {
-    private readonly IUserService _userService;
-    private readonly IInboxService _inboxService;
-    private readonly IOutboxService _outboxService;
-    private readonly IOptions<WebRoutingSettings> _webRoutingSettings;
-    private readonly IScopeProvider _scopeProvider;
-
-    public ActivityPubController(
-        IUserService userService,
-        IInboxService inboxService,
-        IOutboxService outboxService,
-        IOptions<WebRoutingSettings> webRoutingSettings,
-        IScopeProvider scopeProvider)
-    {
-        _userService = userService;
-        _inboxService = inboxService;
-        _outboxService = outboxService;
-        _webRoutingSettings = webRoutingSettings;
-        _scopeProvider = scopeProvider;
-    }
-
     [HttpGet("actor/{userName}")]
     public ActionResult<Actor> GetActor(string userName)
     {
-        var user = _userService.GetUserByActivityPubName(userName);
-        if (user == null)
-            return NotFound();
+        Actor actor;
+        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        {
+            var user = userService.GetUserByActivityPubName(userName);
+            if (user == null)
+                return NotFound();
 
-        return Ok(new Actor(user, _webRoutingSettings, _scopeProvider));
+
+            actor = new Actor(user, webRoutingSettings, scopeProvider);
+        }
+        else
+        {
+            var user = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            actor = new Actor(user, webRoutingSettings, scopeProvider);
+        }
+        
+        return Ok(actor);
     }
 
     [HttpGet("actor/{userName}/followers")]
     public async Task<ActionResult<Collection>> GetFollowersCollection(string userName)
     {
-        using var scope = _scopeProvider.CreateScope();
+        using var scope = scopeProvider.CreateScope();
         var followers = await
             scope.Database.FetchAsync<ReceivedActivitiesSchema>(
                 "SELECT * FROM receivedActivityPubActivities WHERE Type = @0", "Follow");
@@ -74,9 +73,23 @@ public class ActivityPubController : UmbracoApiController
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = _userService.GetUserByActivityPubName(userName);
-        if (user == null)
-            return NotFound();
+        string activityPubUserName;
+        int userId;
+
+        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        {
+            var user = userService.GetUserByActivityPubName(userName);
+            if (user == null)
+                return NotFound();
+
+            activityPubUserName = user.ActivityPubUserName()!;
+            userId = user.Id;
+        }
+        else
+        {
+            userId = uActivitySettingKeys.SingleUserModeUserId;
+            activityPubUserName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+        }
 
         var signature = Request.Headers["Signature"];
         
@@ -85,9 +98,9 @@ public class ActivityPubController : UmbracoApiController
             switch (activity.Type)
             {
                 case "Follow":
-                    return Ok(await _inboxService.HandleFollow(activity, signature, user));
+                    return Ok(await inboxService.HandleFollow(activity, signature, activityPubUserName, userId));
                 case "Undo":
-                    return Ok(await _inboxService.HandleUndo(activity, signature));
+                    return Ok(await inboxService.HandleUndo(activity, signature));
                 default:
                     return BadRequest($"{activity.Type} is not supported on this server");
             }
@@ -101,13 +114,24 @@ public class ActivityPubController : UmbracoApiController
     [HttpGet("outbox/{userName}")]
     public ActionResult<OrderedCollection> GetOutbox(string userName)
     {
-        var user = _userService.GetUserByActivityPubName(userName);
-        if (user == null)
-            return NotFound();
-        
+        OrderedCollection<Activity>? outbox;
+        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        {
+            var user = userService.GetUserByActivityPubName(userName);
+            if (user == null)
+                return NotFound();
+
+            outbox = outboxService.GetPublicOutbox(user.ActivityPubUserName()!);
+        }
+        else
+        {
+            var activityPubUserName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            outbox = outboxService.GetPublicOutbox(activityPubUserName);
+        }
+
         try
         {
-            return Ok(_outboxService.GetPublicOutbox(user));
+            return Ok(outbox);
         }
         catch
         {

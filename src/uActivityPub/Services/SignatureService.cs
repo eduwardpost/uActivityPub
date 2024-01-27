@@ -6,30 +6,19 @@ using uActivityPub.Data;
 using uActivityPub.Helpers;
 using uActivityPub.Models;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Services;
 
-public class SignatureService : ISignatureService
+public class SignatureService(
+    IUmbracoDatabaseFactory databaseFactory,
+    IHttpClientFactory httpClientFactory,
+    IOptions<WebRoutingSettings> webRoutingSettings)
+    : ISignatureService
 {
-    private readonly IUmbracoDatabaseFactory _databaseFactory;
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IOptions<WebRoutingSettings> _webRoutingSettings;
-
-    public SignatureService(
-        IUmbracoDatabaseFactory  databaseFactory,
-        IHttpClientFactory httpClientFactory,
-        IOptions<WebRoutingSettings> webRoutingSettings)
-    {
-        _databaseFactory = databaseFactory;
-        _httpClientFactory = httpClientFactory;
-        _webRoutingSettings = webRoutingSettings;
-    }
-
     public async Task<Actor?> GetActor(string actorUrl)
     {
-        var client = _httpClientFactory.CreateClient();
+        var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         var response = await client.GetAsync(actorUrl);
 
@@ -42,11 +31,11 @@ public class SignatureService : ISignatureService
         return actor;
     }
 
-    public async Task<(string KeyId, RSA Rsa)> GetPrimaryKeyForUser(IUser user)
+    public async Task<(string KeyId, RSA Rsa)> GetPrimaryKeyForUser(string userName, int userId)
     {
-        var database = _databaseFactory.CreateDatabase();
+        var database = databaseFactory.CreateDatabase();
         
-        var userKey = await database.FirstOrDefaultAsync<UserKeysSchema>("SELECT * FROM userKeys WHERE UserId = @0", user.Id);
+        var userKey = await database.FirstOrDefaultAsync<UserKeysSchema>("SELECT * FROM userKeys WHERE UserId = @0", userId);
         var rsa = RSA.Create(2048);
         
         if (userKey == null)
@@ -55,7 +44,7 @@ public class SignatureService : ISignatureService
 
             userKey = new UserKeysSchema
             {
-                Id = user.Id,
+                Id = userId,
                 PublicKey = rsa.ExportRSAPublicKeyPem(),
                 PrivateKey = rsa.ExportRSAPrivateKeyPem()
             };
@@ -67,6 +56,6 @@ public class SignatureService : ISignatureService
             rsa = userKey.PrivateKey.GetRSAFromPem();
         }
         
-        return ($"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{user.ActivityPubUserName()}#main-key", rsa);
+        return ($"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}#main-key", rsa);
     }
 }

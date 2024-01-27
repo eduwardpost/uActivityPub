@@ -1,15 +1,15 @@
 using System;
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
-using Umbraco.Cms.Core.Configuration.Models;
 using uActivityPub.Services;
+using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Web;
 
-namespace uActivityPub.Tests;
+namespace uActivityPub.Tests.HelperTests;
 
 public class ActivityHelperTests
 {

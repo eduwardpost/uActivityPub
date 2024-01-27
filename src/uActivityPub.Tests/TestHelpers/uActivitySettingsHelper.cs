@@ -2,7 +2,7 @@
 using uActivityPub.Data;
 using uActivityPub.Helpers;
 
-namespace uActivityPub.Tests;
+namespace uActivityPub.Tests.TestHelpers;
 
 public static class uActivitySettingsHelper
 {
@@ -36,7 +36,7 @@ public static class uActivitySettingsHelper
          },
          new uActivitySettings
          {
-            Id = 4,
+            Id = 5,
             Key = uActivitySettingKeys.SingleUserModeUserName,
             Value = "uActivityPub"
          }

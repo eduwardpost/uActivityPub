@@ -61,21 +61,33 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
 
         if (posts.Any()) 
             return;
-            
-            
-        var userId = post.GetValue<int>(userPropertyAlias!.Value);
-        var user = _userService.GetUserById(userId);
-        if (user == null)
+
+        string userName;
+        int userId;
+
+        if (_uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
-            throw new InvalidOperationException("Could not find user or actor for article");
+            userId = post.GetValue<int>(userPropertyAlias!.Value);
+            var user = _userService.GetUserById(userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException("Could not find user or actor for article");
+            }
+
+            userName = user.ActivityPubUserName()!;
+        }
+        else
+        {
+            userName = _uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            userId = uActivitySettingKeys.SingleUserModeUserId;
         }
             
-        var actor = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{user.ActivityPubUserName()}";
+        var actor = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}";
                 
         var activity = _activityHelper.GetActivityFromContent(post, actor);
-                
-        var keyInfo = _signatureService.GetPrimaryKeyForUser(user).Result;
-        var serializedActivity = JsonSerializer.Serialize(activity, new JsonSerializerOptions()
+
+        var keyInfo = _signatureService.GetPrimaryKeyForUser(userName, userId).Result;
+        var serializedActivity = JsonSerializer.Serialize(activity, new JsonSerializerOptions
         {
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
