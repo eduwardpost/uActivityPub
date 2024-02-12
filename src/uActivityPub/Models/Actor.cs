@@ -93,6 +93,7 @@ public class Actor : ActivityPubBase
     /// <param name="scopeProvider"></param>
     public Actor(string userName, IOptions<WebRoutingSettings> webRoutingSettings, IScopeProvider scopeProvider) : this()
     {
+        PreferredUsername = userName;
         Id = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}";
         Inbox = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/inbox/{userName}";
         Outbox = $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/outbox/{userName}";

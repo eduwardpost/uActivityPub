@@ -23,8 +23,8 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.14</Version>
-        <AssemblyVersion>1.0.14</AssemblyVersion>
+        <Version>1.0.15</Version>
+        <AssemblyVersion>1.0.15</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
