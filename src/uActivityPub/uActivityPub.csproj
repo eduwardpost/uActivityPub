@@ -40,10 +40,10 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Umbraco.Cms.Core" Version="13.1.0" />
-        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.1.0" />
+        <PackageReference Include="Umbraco.Cms.Core" Version="13.1.1" />
+        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.1.1" />
         <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.0.3" />
-        <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.1.0" />
+        <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.1.1" />
     </ItemGroup>
     
     <ItemGroup>
