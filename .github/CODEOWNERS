@@ -1,0 +1,15 @@
+# General code owners
+
+* @eduwardpost
+
+# Documentation owner
+
+/docs/ @eduwardpost
+
+# Source code owner
+
+/src/ @eduwardpost
+
+# github management owner 
+
+/.github/ @eduwardpost
