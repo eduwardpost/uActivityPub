@@ -17,14 +17,16 @@
         <Authors>Eduward Post</Authors>
         <Description>A umbraco package user to make your installation interface with the fediverse</Description>
         <RepositoryUrl>https://github.com/eduwardpost/uActivityPub.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/eduwardpost/uActivityPub</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>library, umbraco, umbraco-marketplace, fediverse</PackageTags>
         <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>uActivityPub-icon.png</PackageIcon>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.16</Version>
-        <AssemblyVersion>1.0.16</AssemblyVersion>
+        <Version>1.0.17</Version>
+        <AssemblyVersion>1.0.17</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -33,6 +35,7 @@
 
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\docs\Writerside\images\uActivityPub-icon.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
