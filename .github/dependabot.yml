@@ -13,6 +13,9 @@ updates:
       xunit:
         patterns:
           - xunit*
+      coverlet:
+        patterns:
+          - coverlet*
       umbraco:
         patterns:
           - Umbraco.Cms*
