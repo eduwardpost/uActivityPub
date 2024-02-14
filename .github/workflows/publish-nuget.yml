@@ -112,10 +112,10 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       working-directory: ./src
       run: |
-        dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.opencover.xml
+        dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./**/coverage.opencover.xml
 
         dotnet build --configuration Release
-        dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/Program.cs" --logger trx --results-directory
+        dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/Program.cs" --logger trx --results-directory ./
 
         dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
