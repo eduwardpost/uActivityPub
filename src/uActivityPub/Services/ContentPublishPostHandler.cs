@@ -39,7 +39,7 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
     {
         var settings = _uActivitySettingsService.GetAllSettings();
         var contentAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
-        var userPropertyAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
+        var userPropertyAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.UserNameContentAlias);
 
         if (contentAlias == null)
             throw new InvalidOperationException("Could not find configured key for the content type");
