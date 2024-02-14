@@ -72,7 +72,7 @@ jobs:
       - name: Validate package
         run: meziantou.validate-nuget-package (Get-ChildItem "${{ env.NuGetDirectory }}/*.nupkg") --excluded-rules IconMustBeSet --excluded-rules ProjectUrlMustBeSet --excluded-rules PackageIdAvailableOnNuGetOrg
 
-  run_test:
+  run_build_and_test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -128,7 +128,7 @@ jobs:
     # You can update this logic if you want to manage releases differently
     if: github.event_name == 'workflow_run'
     runs-on: ubuntu-latest
-    needs: [ validate_nuget, run_test ]
+    needs: [ validate_nuget, run_build_and_test ]
     steps:
       # Download the NuGet package created in the previous job
       - uses: actions/download-artifact@v4
