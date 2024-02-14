@@ -105,7 +105,7 @@ jobs:
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       run: |
         mkdir .\.sonar\scanner
-        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+        dotnet tool install dotnet-sonarscanner --global
         dotnet tool install dotnet-coverage --global
       
     - name: Build and analyze
@@ -114,12 +114,12 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       working-directory: ./src
       run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+        dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
         dotnet build --configuration Release
         dotnet-coverage collect "dotnet test --configuration Release --results-directory --logger trx" -f xml -o coverage.xml
-        
-        .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+        dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
   deploy:
