@@ -18,9 +18,14 @@ public class SignatureService(
 {
     public async Task<Actor?> GetActor(string actorUrl)
     {
+        var actorUri = new Uri(actorUrl);
+
+        if (actorUri.Scheme != "https")
+            throw new InvalidOperationException("We only allow requests to https to get actor information");
+        
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        var response = await client.GetAsync(actorUrl);
+        var response = await client.GetAsync(actorUri);
 
         if (!response.IsSuccessStatusCode)
             return null;
