@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -99,6 +100,32 @@ MgFKgU33/La9N9fDU4/d3yUbImyOG8doJws6GwCXIYYOLprAmNf0cmHffE9SFMJ3
         //Assert
         Assert.NotNull(retrievedActor);
         Assert.Equal(actorString, retrievedActor.Id);
+    }
+    
+    [Fact]
+    public async Task GetActorThatDoesNotUserHttpsThrowsInvalidOperationException()
+    {
+        //Arrange
+        const string actorString = "http://localhost.test/actor/testactor";
+
+        var databaseFactoryMock = new Mock<IUmbracoDatabaseFactory>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+      
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When(actorString)
+            .Respond(HttpStatusCode.NotFound);
+        
+        var client = mockHttp.ToHttpClient();
+
+        httpClientFactoryMock.Setup(x => x.CreateClient(Options.DefaultName))
+            .Returns(client);
+
+
+        var unitUnderTest = new SignatureService(databaseFactoryMock.Object, httpClientFactoryMock.Object,
+            _webRouterSettingsMock.Object);
+
+        //Act && Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await unitUnderTest.GetActor(actorString));
     }
     
     [Fact]
