@@ -20,13 +20,13 @@
         <RepositoryUrl>https://github.com/eduwardpost/uActivityPub</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>library, umbraco, umbraco-marketplace, fediverse</PackageTags>
-        <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+        <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>uActivityPub-icon.png</PackageIcon>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.18</Version>
-        <AssemblyVersion>1.0.18</AssemblyVersion>
+        <Version>1.0.19</Version>
+        <AssemblyVersion>1.0.19</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
