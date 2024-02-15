@@ -19,7 +19,7 @@ public class Actor : ActivityPubBase
     public string? Outbox { get; set; }
     public string? Followers { get; set; }
     public Icon? Icon { get; set; }
-    public DateTime? Published { get; set; } = new DateTime(2023, 07, 17, 12, 00, 00);
+    public DateTime? Published { get; set; } = DateTime.Now.AddDays(-1);
     public DateTime? Updated { get; set; } = DateTime.Now;
     public bool ManuallyApprovesFollowers { get; set; } = false;
     

@@ -3,10 +3,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using uActivityPub.Data;
-using uActivityPub.Helpers;
 using uActivityPub.Models;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Services;
@@ -18,6 +16,12 @@ public class InboxService(
     ISingedRequestHandler singedRequestHandler)
     : IInboxService
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    
     public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
         Log.Information("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
@@ -30,7 +34,7 @@ public class InboxService(
         var publicPem = actor.PublicKey?.PublicKeyPem;
         var signatureParts = signature.Split(',');
 
-        if (!string.IsNullOrEmpty(publicPem) && signatureParts.Any())
+        if (!string.IsNullOrEmpty(publicPem) && signatureParts.Length != 0)
         {
             //we have a pem file and signature header parts
            // var rsa = publicPem.GetRSAFromPem();
@@ -64,11 +68,7 @@ public class InboxService(
         
         var keyInfo = await signatureService.GetPrimaryKeyForUser(userName, userId);
 
-        var response = await singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, new JsonSerializerOptions
-        {
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        }), keyInfo.KeyId);
+        var response = await singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, JsonSerializerOptions), keyInfo.KeyId);
         
         Log.Information("Send {@ResponseActivity} to {@Actor} response is {@Response} with content {Content}", responseActivity, actor, response, await response.Content.ReadAsStringAsync());
 

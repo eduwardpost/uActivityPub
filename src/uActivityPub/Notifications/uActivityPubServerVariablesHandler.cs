@@ -13,12 +13,12 @@ public class uActivityPubServerVariablesHandler  : INotificationHandler<ServerVa
     /// <inheritdoc cref="INotificationHandler{TNotification}" />
     public uActivityPubServerVariablesHandler(LinkGenerator linkGenerator)
     {
-        _linkGenerator = linkGenerator;    
+        _linkGenerator = linkGenerator ?? throw new ArgumentNullException(nameof(linkGenerator));    
     }
     
     public void Handle(ServerVariablesParsingNotification notification)
     {
-        notification.ServerVariables.Add("uActivityPub", new Dictionary<string, object>
+        notification.ServerVariables.Add("uActivityPub", new Dictionary<string, object?>
         {
             { "uActivityPubService", _linkGenerator.GetUmbracoApiServiceBaseUrl<UActivityPubDashboardApiController>(controller => controller.GetApi()) }
         });

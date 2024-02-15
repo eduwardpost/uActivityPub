@@ -52,7 +52,7 @@ public class ActivityPubController(
             scope.Database.FetchAsync<ReceivedActivitiesSchema>(
                 "SELECT * FROM receivedActivityPubActivities WHERE Type = @0", "Follow");
 
-        if (!followers.Any())
+        if (followers.Count == 0)
             return Ok(new Collection());
 
         var collection = new Collection<string>();
@@ -91,19 +91,16 @@ public class ActivityPubController(
             activityPubUserName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
         }
 
-        var signature = Request.Headers["Signature"];
+        var signature = Request.Headers["Signature"].FirstOrDefault() ?? string.Empty;
         
         try
         {
-            switch (activity.Type)
+            return activity.Type switch
             {
-                case "Follow":
-                    return Ok(await inboxService.HandleFollow(activity, signature, activityPubUserName, userId));
-                case "Undo":
-                    return Ok(await inboxService.HandleUndo(activity, signature));
-                default:
-                    return BadRequest($"{activity.Type} is not supported on this server");
-            }
+                "Follow" => Ok(await inboxService.HandleFollow(activity, signature, activityPubUserName, userId)),
+                "Undo" => Ok(await inboxService.HandleUndo(activity, signature)),
+                _ => BadRequest($"{activity.Type} is not supported on this server")
+            };
         }
         catch
         {
