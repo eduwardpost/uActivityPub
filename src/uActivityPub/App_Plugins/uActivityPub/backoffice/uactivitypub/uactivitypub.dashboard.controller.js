@@ -4,8 +4,8 @@
     function dashboardController($controller, $scope, $http, $timeout, navigationService, eventsService, notificationsService) {
         $scope.loaded = false;
 
-        var vm = this;
-        
+        let vm = this;
+
         vm.settings = {
             singleUserMode: false,
             singleUserModeUserName: '',
@@ -15,7 +15,7 @@
         };
         
         function loadSettings () {
-            var url = Umbraco.Sys.ServerVariables.uActivityPub.uActivityPubService;
+            let url = Umbraco.Sys.ServerVariables.uActivityPub.uActivityPubService;
 
             $http({
                 method: 'get',

@@ -11,7 +11,7 @@ namespace uActivityPub.Tests.ServiceTests;
 public class UActivitySettingsServiceTests
 {
 
-    private readonly IUActivitySettingsService _unitUnderTest;
+    private readonly UActivitySettingsService _unitUnderTest;
     
     // Mock
     private readonly Mock<IUmbracoDatabase> _dataBaseMock;

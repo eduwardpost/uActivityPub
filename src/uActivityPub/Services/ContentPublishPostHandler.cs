@@ -14,6 +14,12 @@ namespace uActivityPub.Services;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNotification>
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new()
+    {
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    
     private readonly IUmbracoDatabaseFactory _databaseFactory;
     private readonly IOptions<WebRoutingSettings> _webRoutingSettings;
     private readonly IUserService _userService;
@@ -37,9 +43,9 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
 
     public void Handle(ContentPublishedNotification notification)
     {
-        var settings = _uActivitySettingsService.GetAllSettings();
-        var contentAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
-        var userPropertyAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.UserNameContentAlias);
+        var settings = _uActivitySettingsService.GetAllSettings()?.ToList();
+        var contentAlias = settings?.Find(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
+        var userPropertyAlias = settings?.Find(s => s.Key == uActivitySettingKeys.UserNameContentAlias);
 
         if (contentAlias == null)
             throw new InvalidOperationException("Could not find configured key for the content type");
@@ -67,7 +73,7 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
 
         if (_uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
-            userId = post.GetValue<int>(userPropertyAlias!.Value);
+            userId = post.GetValue<int>(userPropertyAlias.Value);
             var user = _userService.GetUserById(userId);
             if (user == null)
             {
@@ -87,11 +93,7 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
         var activity = _activityHelper.GetActivityFromContent(post, actor);
 
         var keyInfo = _signatureService.GetPrimaryKeyForUser(userName, userId).Result;
-        var serializedActivity = JsonSerializer.Serialize(activity, new JsonSerializerOptions
-        {
-            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var serializedActivity = JsonSerializer.Serialize(activity, JsonSerializerOptions);
 
         var followers =
             database.Query<ReceivedActivitiesSchema>(

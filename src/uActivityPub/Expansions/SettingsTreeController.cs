@@ -44,7 +44,7 @@ public class SettingsTreeController(
             return rootResult;
         }
 
-        var root = rootResult.Value ?? throw new NullReferenceException(nameof(rootResult));
+        var root = rootResult.Value ?? throw new InvalidOperationException($"The value of {nameof(rootResult)} is unexpectedly null");
 
         //set the route
         root.RoutePath = $"{SectionAlias}/{uActivityPubConstants.Package.TreeName}/dashboard";
