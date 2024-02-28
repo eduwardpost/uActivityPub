@@ -8,6 +8,7 @@ using uActivityPub.Models;
 using uActivityPub.Services;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Persistence;
 using IScope = Umbraco.Cms.Infrastructure.Scoping.IScope;
@@ -55,7 +56,7 @@ public class ActorTests
     }
 
     [Fact]
-    public void Calling_Paremeter_Constructor_In_SingleUserMode_Creates_Actor()
+    public void Calling_Parameter_Constructor_In_SingleUserMode_Creates_Actor()
     {
         // Arrange
         const string actorUserName = "uactivitypub";
@@ -68,6 +69,39 @@ public class ActorTests
         // Act
         var actor = new Actor(actorUserName, _webRouterSettingsMock.Object, _uActivitySettingsServiceMock.Object,
             _scopeProviderMock.Object);
+        
+        // Assert
+        actor.Should().NotBeNull();
+        actor.PreferredUsername.Should().Be(actorUserName);
+        actor.Id.Should().Contain(actorUserName);
+        actor.Inbox.Should().Contain(actorUserName);
+        actor.Outbox.Should().Contain(actorUserName);
+        actor.Followers.Should().Contain(actorUserName);
+        actor.Icon.Should().NotBeNull();
+        actor.Icon!.Url.Should().NotBeNull();
+        actor.PublicKey.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public void Calling_Parameter_Constructor_In_MultiUserMode_Creates_Actor()
+    {
+        // Arrange
+        const string actorUserName = "uactivitypub";
+        var user = new Mock<IUser>();
+        user.Setup(x => x.Name)
+            .Returns(actorUserName);
+        user.Setup(x => x.Id)
+            .Returns(1);
+        user.Setup(x => x.Email)
+            .Returns($"{actorUserName}@unit.test");
+        
+        var settings = uActivitySettingsHelper.GetSettings();
+
+        _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
+        
+        // Act
+        var actor = new Actor(actorUserName, _webRouterSettingsMock.Object, _uActivitySettingsServiceMock.Object,
+            _scopeProviderMock.Object, user.Object);
         
         // Assert
         actor.Should().NotBeNull();
