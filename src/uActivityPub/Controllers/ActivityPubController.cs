@@ -33,12 +33,12 @@ public class ActivityPubController(
                 return NotFound();
 
 
-            actor = new Actor(user, webRoutingSettings, scopeProvider);
+            actor = new Actor(user.ActivityPubUserName() ?? string.Empty, webRoutingSettings, uActivitySettingsService, scopeProvider, user);
         }
         else
         {
             var user = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
-            actor = new Actor(user, webRoutingSettings, scopeProvider);
+            actor = new Actor(user, webRoutingSettings, uActivitySettingsService, scopeProvider);
         }
         
         return Ok(actor);
