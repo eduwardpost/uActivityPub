@@ -7,6 +7,7 @@ public class Note : ActivityPubBase
     public string? Published { get; set; }
     public string? AttributedTo { get; set; }
     public string? To { get; set; }
+    public string? InReplyTo { get; set; }
 
     public Note()
     {

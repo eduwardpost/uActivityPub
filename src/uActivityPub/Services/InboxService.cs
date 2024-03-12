@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -75,6 +76,21 @@ public class InboxService(
         return responseActivity;
     }
 
+    public async Task<ActionResult> HandleCreate(Activity activity, string signature)
+    {
+        var activityJObject = (JObject) activity.Object;
+        
+        if(activityJObject["type"]?.ToObject<string>() != "note")
+            return new BadRequestObjectResult("This type of create is not supported");
+
+        var noteObject = activityJObject.ToObject<Note>();
+        
+        Log.Information("Received note in reply to {Source}", noteObject?.InReplyTo);
+        
+
+        return new OkObjectResult("");
+    }
+    
     public async Task<Activity?> HandleUndo(Activity activity, string signature)
     {
         //todo 1. Check if valid (optional for now)

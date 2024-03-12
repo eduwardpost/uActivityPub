@@ -99,6 +99,7 @@ public class ActivityPubController(
             {
                 "Follow" => Ok(await inboxService.HandleFollow(activity, signature, activityPubUserName, userId)),
                 "Undo" => Ok(await inboxService.HandleUndo(activity, signature)),
+                "Create" => await inboxService.HandleCreate(activity, signature),
                 _ => BadRequest($"{activity.Type} is not supported on this server")
             };
         }
