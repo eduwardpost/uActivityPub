@@ -44,7 +44,7 @@ jobs:
       working-directory: ./src
       if: ${{ !inputs.prerelease }}
 
-    - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} --version-suffix "prerelease"
+    - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} --version-suffix "alpha"
       working-directory: ./src
       if: ${{ inputs.prerelease }}
 
