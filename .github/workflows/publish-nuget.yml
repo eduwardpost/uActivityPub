@@ -3,6 +3,11 @@
 name: publish
 on:
   workflow_dispatch: # Allow running the workflow manually from the GitHub UI
+    inputs:
+        prerelease:
+            description: 'Set this release as prerelease'
+            default: false
+            type: boolean
   push:
     branches:
       - 'main'       # Run the workflow when pushing to the main branch
@@ -37,6 +42,11 @@ jobs:
     # Create the NuGet package in the folder from the environment variable NuGetDirectory
     - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }}
       working-directory: ./src
+      if: !inputs.prerelease
+
+    - run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} --version-suffix "prerelease"
+      working-directory: ./src
+      if: inputs.prerelease
 
     # Publish the NuGet package as an artifact, so they can be used in the following jobs
     - uses: actions/upload-artifact@v4
