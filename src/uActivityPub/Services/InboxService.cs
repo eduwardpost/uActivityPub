@@ -5,13 +5,16 @@ using Newtonsoft.Json.Linq;
 using Serilog;
 using uActivityPub.Data;
 using uActivityPub.Models;
+using uActivityPub.Notifications;
 using Umbraco.Cms.Core.Configuration.Models;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Services;
 
 public class InboxService(
     IUmbracoDatabaseFactory databaseFactory,
+    ICoreScopeProvider coreScopeProvider,
     IOptions<WebRoutingSettings> webRoutingSettings,
     ISignatureService signatureService,
     ISingedRequestHandler singedRequestHandler)
@@ -80,15 +83,39 @@ public class InboxService(
     {
         var activityJObject = (JObject) activity.Object;
         
-        if(activityJObject["type"]?.ToObject<string>() != "note")
+        if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" && activityJObject["inReplyTo"]?.ToObject<string>() != null)
             return new BadRequestObjectResult("This type of create is not supported");
 
         var noteObject = activityJObject.ToObject<Note>();
+        if (noteObject == null)
+            return new BadRequestObjectResult("Could not parse note");
         
-        Log.Information("Received note in reply to {Source}", noteObject?.InReplyTo);
+        Log.Information("Received note in reply to {Source}", noteObject.InReplyTo);
         
+        using var database = databaseFactory.CreateDatabase();
+        var reply = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1 AND [Object] = @2", "Reply", activity.Actor, activity.Id!);
 
-        return new OkObjectResult("");
+        if (reply != null)
+            return new OkResult();
+
+        var receivedActivity = new ReceivedActivitiesSchema
+        {
+            Actor = activity.Actor,
+            Object = activity.Id!,
+            Type = activity.Type
+        };
+        database.Insert("receivedActivityPubActivities", "Id", true, receivedActivity);
+
+        var scope = coreScopeProvider.CreateCoreScope();
+
+        var parsedContentId = int.TryParse(noteObject!.InReplyTo!.Split('/').Last(), out var contentId);
+        if(parsedContentId)
+            scope.Notifications.Publish(new ActivityPubReplyReceivedNotification(contentId, activity.Actor, noteObject!.Content));
+        else 
+            Log.Warning("Could not get content Id from: {Id}", noteObject.InReplyTo);
+        
+        
+        return new OkResult();
     }
     
     public async Task<Activity?> HandleUndo(Activity activity, string signature)
