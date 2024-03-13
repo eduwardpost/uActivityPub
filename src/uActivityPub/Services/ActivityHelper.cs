@@ -46,7 +46,7 @@ public class ActivityHelper : IActivityHelper
                 Content = $"{content.GetValue<string>("metaName")}<br/>{content.GetValue<string>("metaDescription")}<br/><a href=\"{blogUrl}\">{blogUrl}</a>",
                 Url = blogUrl,
                 Published = $"{content.PublishDate:s}",
-                To = "https://www.w3.org/ns/activitystreams#Public",
+                To = new List<string>() { "https://www.w3.org/ns/activitystreams#Public" },
                 AttributedTo = actor
             }
         };

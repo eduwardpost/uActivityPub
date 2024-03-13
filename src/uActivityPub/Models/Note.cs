@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using uActivityPub.Helpers;
+
 namespace uActivityPub.Models;
 
 public class Note : ActivityPubBase
@@ -6,7 +9,9 @@ public class Note : ActivityPubBase
     public string? Url { get; set; }
     public string? Published { get; set; }
     public string? AttributedTo { get; set; }
-    public string? To { get; set; }
+
+    [JsonConverter(typeof(SingleOrArrayConverter<string>))]
+    public IEnumerable<string> To { get; set; } = default!;
     public string? InReplyTo { get; set; }
 
     public Note()

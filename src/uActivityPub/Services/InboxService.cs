@@ -2,14 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using uActivityPub.Data;
+using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Notifications;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Persistence;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace uActivityPub.Services;
 
@@ -83,21 +86,16 @@ public class InboxService(
 
     public async Task<ActionResult> HandleCreate(Activity activity, string signature)
     {
-        logger.LogInformation("Handling create activity {@Activity}", activity);
         var activityJObject = (JObject) activity.Object;
-        logger.LogInformation("Handling create activity with object {@Content}", activityJObject);
-
         
-        if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" && activityJObject["inReplyTo"]?.ToObject<string>() != null)
+        if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" || activityJObject["inReplyTo"]?.ToObject<string>() == null)
             return new BadRequestObjectResult("This type of create is not supported");
 
-        var noteObject = activityJObject.ToObject<Note>();
+        var jsonString = activityJObject.ToString(Formatting.None);
+        
+        var noteObject = JsonSerializer.Deserialize<Note>(jsonString);
         if (noteObject == null)
             return new BadRequestObjectResult("Could not parse note");
-        
-        logger.LogInformation("Handling create activity with note {@Note}", noteObject);
-        
-        logger.LogInformation("Received note in reply to {Source}", noteObject.InReplyTo);
         
         using var database = databaseFactory.CreateDatabase();
         var reply = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1 AND [Object] = @2", "Reply", activity.Actor, activity.Id!);
