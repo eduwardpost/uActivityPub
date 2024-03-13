@@ -25,9 +25,8 @@
         <PackageIcon>uActivityPub-icon.png</PackageIcon>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.25</Version>
-        <AssemblyVersion>1.0.25</AssemblyVersion>
-        <VersionSuffix>alpha</VersionSuffix>
+        <Version>1.0.26</Version>
+        <AssemblyVersion>1.0.26</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
