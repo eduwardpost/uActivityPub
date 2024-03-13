@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Serilog;
 using uActivityPub.Data;
-using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Notifications;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
+using Umbraco.Extensions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace uActivityPub.Services;
@@ -19,7 +19,8 @@ namespace uActivityPub.Services;
 public class InboxService(
     ILogger<InboxService> logger,
     IUmbracoDatabaseFactory databaseFactory,
-    ICoreScopeProvider coreScopeProvider,
+    IUmbracoContextAccessor umbracoContextAccessor,
+    IEventAggregator eventAggregator,
     IOptions<WebRoutingSettings> webRoutingSettings,
     ISignatureService signatureService,
     ISingedRequestHandler singedRequestHandler)
@@ -93,7 +94,10 @@ public class InboxService(
 
         var jsonString = activityJObject.ToString(Formatting.None);
         
-        var noteObject = JsonSerializer.Deserialize<Note>(jsonString);
+        var noteObject = JsonSerializer.Deserialize<Note>(jsonString, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
         if (noteObject == null)
             return new BadRequestObjectResult("Could not parse note");
         
@@ -107,15 +111,17 @@ public class InboxService(
         {
             Actor = activity.Actor,
             Object = activity.Id!,
-            Type = activity.Type
+            Type = "Reply"
         };
         database.Insert("receivedActivityPubActivities", "Id", true, receivedActivity);
 
-        var scope = coreScopeProvider.CreateCoreScope();
-
-        var parsedContentId = int.TryParse(noteObject!.InReplyTo!.Split('/').Last(), out var contentId);
-        if(parsedContentId)
-            scope.Notifications.Publish(new ActivityPubReplyReceivedNotification(contentId, activity.Actor, noteObject!.Content));
+        
+        var context = umbracoContextAccessor.GetRequiredUmbracoContext();
+        var url = noteObject.InReplyTo!.Replace(webRoutingSettings.Value.UmbracoApplicationUrl.TrimEnd('/'), "");
+        var inResponseOfContent = context.Content.GetByRoute(url);
+        
+        if(inResponseOfContent != null)
+            await eventAggregator.PublishAsync(new ActivityPubReplyReceivedNotification(inResponseOfContent.Id, activity.Actor, noteObject.Content));
         else 
             logger.LogWarning("Could not get content Id from: {Id}", noteObject.InReplyTo);
         
