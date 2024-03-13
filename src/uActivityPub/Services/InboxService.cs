@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Serilog;
@@ -13,6 +14,7 @@ using Umbraco.Cms.Infrastructure.Persistence;
 namespace uActivityPub.Services;
 
 public class InboxService(
+    ILogger<InboxService> logger,
     IUmbracoDatabaseFactory databaseFactory,
     ICoreScopeProvider coreScopeProvider,
     IOptions<WebRoutingSettings> webRoutingSettings,
@@ -28,7 +30,7 @@ public class InboxService(
     
     public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
-        Log.Information("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
+        logger.LogInformation("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
         //todo 1. Check if valid (optional for now)
         var actor = await signatureService.GetActor(activity.Actor);
         
@@ -74,13 +76,14 @@ public class InboxService(
 
         var response = await singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, JsonSerializerOptions), keyInfo.KeyId);
         
-        Log.Information("Send {@ResponseActivity} to {@Actor} response is {@Response} with content {Content}", responseActivity, actor, response, await response.Content.ReadAsStringAsync());
+        logger.LogInformation("Send {@ResponseActivity} to {@Actor} response is {@Response} with content {Content}", responseActivity, actor, response, await response.Content.ReadAsStringAsync());
 
         return responseActivity;
     }
 
     public async Task<ActionResult> HandleCreate(Activity activity, string signature)
     {
+        logger.LogInformation("Handling create activity {@Activity}", activity);
         var activityJObject = (JObject) activity.Object;
         
         if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" && activityJObject["inReplyTo"]?.ToObject<string>() != null)
@@ -90,7 +93,7 @@ public class InboxService(
         if (noteObject == null)
             return new BadRequestObjectResult("Could not parse note");
         
-        Log.Information("Received note in reply to {Source}", noteObject.InReplyTo);
+        logger.LogInformation("Received note in reply to {Source}", noteObject.InReplyTo);
         
         using var database = databaseFactory.CreateDatabase();
         var reply = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1 AND [Object] = @2", "Reply", activity.Actor, activity.Id!);
@@ -112,7 +115,7 @@ public class InboxService(
         if(parsedContentId)
             scope.Notifications.Publish(new ActivityPubReplyReceivedNotification(contentId, activity.Actor, noteObject!.Content));
         else 
-            Log.Warning("Could not get content Id from: {Id}", noteObject.InReplyTo);
+            logger.LogWarning("Could not get content Id from: {Id}", noteObject.InReplyTo);
         
         
         return new OkResult();
