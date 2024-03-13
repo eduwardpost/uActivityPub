@@ -23,6 +23,7 @@ public class ActivityPubController(
     : UmbracoApiController
 {
     [HttpGet("actor/{userName}")]
+    [Produces("application/activity+json")]
     public ActionResult<Actor> GetActor(string userName)
     {
         Actor actor;
