@@ -85,6 +85,8 @@ public class InboxService(
     {
         logger.LogInformation("Handling create activity {@Activity}", activity);
         var activityJObject = (JObject) activity.Object;
+        logger.LogInformation("Handling create activity with object {@Content}", activityJObject);
+
         
         if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" && activityJObject["inReplyTo"]?.ToObject<string>() != null)
             return new BadRequestObjectResult("This type of create is not supported");
@@ -92,6 +94,8 @@ public class InboxService(
         var noteObject = activityJObject.ToObject<Note>();
         if (noteObject == null)
             return new BadRequestObjectResult("Could not parse note");
+        
+        logger.LogInformation("Handling create activity with note {@Note}", noteObject);
         
         logger.LogInformation("Received note in reply to {Source}", noteObject.InReplyTo);
         
