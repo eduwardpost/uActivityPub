@@ -25,8 +25,8 @@
         <PackageIcon>uActivityPub-icon.png</PackageIcon>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.0.23</Version>
-        <AssemblyVersion>1.0.23</AssemblyVersion>
+        <Version>1.0.24</Version>
+        <AssemblyVersion>1.0.24</AssemblyVersion>
         <VersionSuffix>alpha</VersionSuffix>
     </PropertyGroup>
 
