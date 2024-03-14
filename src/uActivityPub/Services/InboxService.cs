@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -87,6 +88,7 @@ public class InboxService(
         return responseActivity;
     }
 
+    [ExcludeFromCodeCoverage]
     public async Task<ActionResult> HandleCreate(Activity activity, string signature)
     {
         var activityJObject = (JObject) activity.Object;

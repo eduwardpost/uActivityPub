@@ -133,4 +133,5 @@ public class InboxServiceTests
         _dataBaseMock.Verify(x => x.Insert("receivedActivityPubActivities", "Id", true, It.IsAny<ReceivedActivitiesSchema>()), Times.Once);
         
     }
+    
 }
