@@ -8,5 +8,6 @@
 
     <toc-element topic="Default-topic.md">
         <toc-element topic="Settings.md"/>
+        <toc-element topic="Listening-to-Replies.md"/>
     </toc-element>
 </instance-profile>

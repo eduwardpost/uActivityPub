@@ -36,7 +36,7 @@ public class InboxService(
     
     public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
-        logger.LogInformation("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
+        logger.LogInformation("Handling follow request for {Actor}", activity.Actor);
         //todo 1. Check if valid (optional for now)
         var actor = await signatureService.GetActor(activity.Actor);
         
