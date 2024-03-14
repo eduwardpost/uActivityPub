@@ -29,8 +29,10 @@ public class InboxService(
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
     };
+    
     
     public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
@@ -94,10 +96,7 @@ public class InboxService(
 
         var jsonString = activityJObject.ToString(Formatting.None);
         
-        var noteObject = JsonSerializer.Deserialize<Note>(jsonString, new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true
-        });
+        var noteObject = JsonSerializer.Deserialize<Note>(jsonString, JsonSerializerOptions);
         if (noteObject == null)
             return new BadRequestObjectResult("Could not parse note");
         
@@ -118,7 +117,7 @@ public class InboxService(
         
         var context = umbracoContextAccessor.GetRequiredUmbracoContext();
         var url = noteObject.InReplyTo!.Replace(webRoutingSettings.Value.UmbracoApplicationUrl.TrimEnd('/'), "");
-        var inResponseOfContent = context.Content.GetByRoute(url);
+        var inResponseOfContent = context.Content?.GetByRoute(url);
         
         if(inResponseOfContent != null)
             await eventAggregator.PublishAsync(new ActivityPubReplyReceivedNotification(inResponseOfContent.Id, activity.Actor, noteObject.Content));
