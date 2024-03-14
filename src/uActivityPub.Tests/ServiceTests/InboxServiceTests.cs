@@ -5,12 +5,15 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Kernel;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using uActivityPub.Data;
 using uActivityPub.Models;
 using uActivityPub.Services;
 using Umbraco.Cms.Core.Configuration.Models;
+using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace uActivityPub.Tests.ServiceTests;
@@ -29,8 +32,12 @@ public class InboxServiceTests
     public InboxServiceTests()
     {
         _fixture = new Fixture();
-        
+
+        var loggingMock = new Mock<ILogger<InboxService>>();
         var dataBaseFactoryMock = new Mock<IUmbracoDatabaseFactory>();
+        var umbracoContextAccessorMock = new Mock<IUmbracoContextAccessor>();
+        var eventAggregatorMock = new Mock<IEventAggregator>();
+        
         _dataBaseMock = new Mock<IUmbracoDatabase>();
         
         dataBaseFactoryMock.Setup(x => x.CreateDatabase())
@@ -46,7 +53,7 @@ public class InboxServiceTests
         });
 
 
-        _unitUnderTest = new InboxService(dataBaseFactoryMock.Object, webRoutingSettingsMock.Object,
+        _unitUnderTest = new InboxService(loggingMock.Object, dataBaseFactoryMock.Object, umbracoContextAccessorMock.Object, eventAggregatorMock.Object, webRoutingSettingsMock.Object,
             _signatureServiceMock.Object, _singedRequestHandlerMock.Object);
     }
 
@@ -126,4 +133,5 @@ public class InboxServiceTests
         _dataBaseMock.Verify(x => x.Insert("receivedActivityPubActivities", "Id", true, It.IsAny<ReceivedActivitiesSchema>()), Times.Once);
         
     }
+    
 }

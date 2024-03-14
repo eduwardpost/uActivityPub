@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
 using uActivityPub.Services;
@@ -88,7 +89,7 @@ public class ActivityHelperTests
         Assert.Equal(expectedUrl, note?.Id);
         Assert.Equal(expectedUrl, note?.Url);
         Assert.Equal($"{publishDate:s}", note?.Published);
-        Assert.Equal("https://www.w3.org/ns/activitystreams#Public", note?.To);
+        Assert.Equal(new List<string> {"https://www.w3.org/ns/activitystreams#Public"}, note?.To);
         Assert.Equal(actorString, note?.AttributedTo);
         Assert.Equal($"{metaName}<br/>{metaDesc}<br/><a href=\"{expectedUrl}\">{expectedUrl}</a>", note?.Content);
     }

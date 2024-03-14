@@ -1,16 +1,27 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Serilog;
 using uActivityPub.Data;
 using uActivityPub.Models;
+using uActivityPub.Notifications;
 using Umbraco.Cms.Core.Configuration.Models;
+using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Persistence;
+using Umbraco.Extensions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace uActivityPub.Services;
 
 public class InboxService(
+    ILogger<InboxService> logger,
     IUmbracoDatabaseFactory databaseFactory,
+    IUmbracoContextAccessor umbracoContextAccessor,
+    IEventAggregator eventAggregator,
     IOptions<WebRoutingSettings> webRoutingSettings,
     ISignatureService signatureService,
     ISingedRequestHandler singedRequestHandler)
@@ -19,12 +30,14 @@ public class InboxService(
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
     };
+    
     
     public async Task<Activity?> HandleFollow(Activity activity, string signature, string userName, int userId)
     {
-        Log.Information("Handling follow request for {Actor}. with activity {@Activity}", activity.Actor, activity);
+        logger.LogInformation("Handling follow request for {Actor}", activity.Actor);
         //todo 1. Check if valid (optional for now)
         var actor = await signatureService.GetActor(activity.Actor);
         
@@ -70,11 +83,53 @@ public class InboxService(
 
         var response = await singedRequestHandler.SendSingedPost(new Uri(actor.Inbox), keyInfo.Rsa, JsonSerializer.Serialize(responseActivity, JsonSerializerOptions), keyInfo.KeyId);
         
-        Log.Information("Send {@ResponseActivity} to {@Actor} response is {@Response} with content {Content}", responseActivity, actor, response, await response.Content.ReadAsStringAsync());
+        logger.LogInformation("Send {@ResponseActivity} to {@Actor} response is {@Response} with content {Content}", responseActivity, actor, response, await response.Content.ReadAsStringAsync());
 
         return responseActivity;
     }
 
+    [ExcludeFromCodeCoverage]
+    public async Task<ActionResult> HandleCreate(Activity activity, string signature)
+    {
+        var activityJObject = (JObject) activity.Object;
+        
+        if(activityJObject["type"]?.ToObject<string>()?.ToLowerInvariant() != "note" || activityJObject["inReplyTo"]?.ToObject<string>() == null)
+            return new BadRequestObjectResult("This type of create is not supported");
+
+        var jsonString = activityJObject.ToString(Formatting.None);
+        
+        var noteObject = JsonSerializer.Deserialize<Note>(jsonString, JsonSerializerOptions);
+        if (noteObject == null)
+            return new BadRequestObjectResult("Could not parse note");
+        
+        using var database = databaseFactory.CreateDatabase();
+        var reply = await database.FirstOrDefaultAsync<ReceivedActivitiesSchema>("SELECT * FROM receivedActivityPubActivities WHERE Type = @0 AND Actor = @1 AND [Object] = @2", "Reply", activity.Actor, activity.Id!);
+
+        if (reply != null)
+            return new OkResult();
+
+        var receivedActivity = new ReceivedActivitiesSchema
+        {
+            Actor = activity.Actor,
+            Object = activity.Id!,
+            Type = "Reply"
+        };
+        database.Insert("receivedActivityPubActivities", "Id", true, receivedActivity);
+
+        
+        var context = umbracoContextAccessor.GetRequiredUmbracoContext();
+        var url = noteObject.InReplyTo!.Replace(webRoutingSettings.Value.UmbracoApplicationUrl.TrimEnd('/'), "");
+        var inResponseOfContent = context.Content?.GetByRoute(url);
+        
+        if(inResponseOfContent != null)
+            await eventAggregator.PublishAsync(new ActivityPubReplyReceivedNotification(inResponseOfContent.Id, activity.Actor, noteObject.Content));
+        else 
+            logger.LogWarning("Could not get content Id from: {Id}", noteObject.InReplyTo);
+        
+        
+        return new OkResult();
+    }
+    
     public async Task<Activity?> HandleUndo(Activity activity, string signature)
     {
         //todo 1. Check if valid (optional for now)

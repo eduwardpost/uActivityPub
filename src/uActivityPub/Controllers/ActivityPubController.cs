@@ -23,6 +23,7 @@ public class ActivityPubController(
     : UmbracoApiController
 {
     [HttpGet("actor/{userName}")]
+    [Produces("application/activity+json")]
     public ActionResult<Actor> GetActor(string userName)
     {
         Actor actor;
@@ -99,6 +100,7 @@ public class ActivityPubController(
             {
                 "Follow" => Ok(await inboxService.HandleFollow(activity, signature, activityPubUserName, userId)),
                 "Undo" => Ok(await inboxService.HandleUndo(activity, signature)),
+                "Create" => await inboxService.HandleCreate(activity, signature),
                 _ => BadRequest($"{activity.Type} is not supported on this server")
             };
         }
