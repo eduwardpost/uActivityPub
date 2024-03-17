@@ -45,7 +45,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
         iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
                     .Returns(new uActivitySettings
@@ -146,7 +146,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
         iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
             .Returns(new uActivitySettings
@@ -255,7 +255,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
 
         contentTypeMock.Setup(x => x.Alias).Returns("nonArticle");
@@ -297,7 +297,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
         contentTypeMock.Setup(x => x.Alias).Returns("article");
         blogPostMock.Setup(x => x.ContentType).Returns(contentTypeMock.Object);
@@ -449,7 +449,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
         iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
             .Returns(new uActivitySettings
@@ -543,7 +543,7 @@ public class ContentPublishPostHandlerTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
         
         iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
             .Returns(new uActivitySettings

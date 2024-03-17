@@ -54,7 +54,7 @@ public class ActivityPubControllerTests
         scopeMock.Setup(x => x.Database)
             .Returns(_umbracoDatabaseMock.Object);
         
-        var settings = uActivitySettingsHelper.GetSettings();
+        var settings = UActivitySettingsHelper.GetSettings();
         settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
         
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
