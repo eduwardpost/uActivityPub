@@ -116,18 +116,29 @@ jobs:
         dotnet tool install dotnet-sonarscanner --global
         dotnet tool install dotnet-coverage --global
       
-    - name: Build and analyze
+    - name: Prepare sonarcloud
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       working-directory: ./src
-      run: |
-        dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./**/coverage.opencover.xml  /d:sonar.coverage.exclusions=**/Program.cs,**/Migrations/*.cs /d:sonar.exclusions=**/Migrations/*.cs
+      run: dotnet-sonarscanner begin /k:"eduwardpost_uActivityPub" /o:"uactivitypub" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=./**/coverage.opencover.xml  /d:sonar.coverage.exclusions=**/Program.cs,**/Migrations/*.cs /d:sonar.exclusions=**/Migrations/*.cs
+        
+    - name: Build project
+      working-directory: ./src
+      run: dotnet build --configuration Release
+        
+    - name: Test project
+      working-directory: ./src
+      run: dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/Program.cs" --logger trx --results-directory ./
 
-        dotnet build --configuration Release
-        dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:ExcludeByFile="**/Program.cs" --logger trx --results-directory ./
+    - name: Analyze project
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      working-directory: ./src
+      run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
-        dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        
 
 
   

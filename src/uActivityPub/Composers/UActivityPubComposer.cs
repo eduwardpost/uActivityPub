@@ -36,6 +36,7 @@ public class UActivityPubComposer : IComposer
         builder.Services.AddTransient<ISignatureService, SignatureService>();
         builder.Services.AddTransient<ISingedRequestHandler, SingedRequestHandler>();
         builder.Services.AddTransient<IActivityHelper, ActivityHelper>();
+        builder.Services.AddTransient<IActorService, ActorService>();
         builder.Services.AddTransient<IUActivitySettingsService, UActivitySettingsService>();
         builder.Services.AddAuthorization(o => CreatePolicies(o));
     }
