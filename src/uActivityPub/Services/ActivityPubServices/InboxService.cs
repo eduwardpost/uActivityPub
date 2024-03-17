@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using uActivityPub.Data;
 using uActivityPub.Models;
 using uActivityPub.Notifications;
+using uActivityPub.Services.HelperServices;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Web;
@@ -15,7 +16,7 @@ using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Extensions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ActivityPubServices;
 
 public class InboxService(
     ILogger<InboxService> logger,

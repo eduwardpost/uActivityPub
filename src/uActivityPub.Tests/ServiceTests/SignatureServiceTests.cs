@@ -8,6 +8,7 @@ using RichardSzalay.MockHttp;
 using uActivityPub.Data;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Services.HelperServices;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Infrastructure.Persistence;
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
-using uActivityPub.Services;
+using uActivityPub.Services.ContentServices;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -86,12 +86,12 @@ public class ActivityHelperTests
         Assert.Equal($"{baseApplicationUrl}activitypub/post/1", activity.Id);
         var note = activity.Object as Note;
         Assert.NotNull(note);
-        Assert.Equal(expectedUrl, note?.Id);
-        Assert.Equal(expectedUrl, note?.Url);
-        Assert.Equal($"{publishDate:s}", note?.Published);
-        Assert.Equal(new List<string> {"https://www.w3.org/ns/activitystreams#Public"}, note?.To);
-        Assert.Equal(actorString, note?.AttributedTo);
-        Assert.Equal($"{metaName}<br/>{metaDesc}<br/><a href=\"{expectedUrl}\">{expectedUrl}</a>", note?.Content);
+        Assert.Equal(expectedUrl, note.Id);
+        Assert.Equal(expectedUrl, note.Url);
+        Assert.Equal($"{publishDate:s}", note.Published);
+        Assert.Equal(new List<string> {"https://www.w3.org/ns/activitystreams#Public"}, note.To);
+        Assert.Equal(actorString, note.AttributedTo);
+        Assert.Equal($"{metaName}<br/>{metaDesc}<br/><a href=\"{expectedUrl}\">{expectedUrl}</a>", note.Content);
     }
     
     [Fact]

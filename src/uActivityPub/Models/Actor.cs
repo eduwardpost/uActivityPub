@@ -58,6 +58,7 @@ public class Actor : ActivityPubBase
         using var scope = scopeProvider.CreateScope();
         var settings = settingsService.GetAllSettings();
         var singleUserMode = settings!.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value == "true";
+        var gravatarEmail = settings!.First(s => s.Key == uActivitySettingKeys.GravatarEmail).Value;
 
         var activityPubUserName = user?.ActivityPubUserName() ?? user?.Id.ToString() ?? userName.ToLowerInvariant();
         var userId = singleUserMode ? uActivitySettingKeys.SingleUserModeUserId : user!.Id;
@@ -75,7 +76,7 @@ public class Actor : ActivityPubBase
             $"{webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{activityPubUserName}/followers";
         Icon = new Icon
         {
-            Url = user?.GetGravatarUrl() ?? userName.GetGravatarUrl() //todo get url to avatar if custom uploaded
+            Url = user?.GetGravatarUrl() ?? gravatarEmail.GetGravatarUrl()
         };
 
 

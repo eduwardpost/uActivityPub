@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.HelperServices;
 
 public interface ISingedRequestHandler
 {

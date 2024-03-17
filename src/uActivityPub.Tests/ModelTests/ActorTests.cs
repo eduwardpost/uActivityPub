@@ -61,7 +61,7 @@ public class ActorTests
         // Arrange
         const string actorUserName = "uactivitypub";
 
-        var settings = uActivitySettingsHelper.GetSettings();
+        var settings = UActivitySettingsHelper.GetSettings();
         settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
 
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
@@ -95,7 +95,7 @@ public class ActorTests
         user.Setup(x => x.Email)
             .Returns($"{actorUserName}@unit.test");
         
-        var settings = uActivitySettingsHelper.GetSettings();
+        var settings = UActivitySettingsHelper.GetSettings();
 
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
         

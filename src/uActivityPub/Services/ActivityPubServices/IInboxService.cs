@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using uActivityPub.Models;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ActivityPubServices;
 
 public interface IInboxService
 {

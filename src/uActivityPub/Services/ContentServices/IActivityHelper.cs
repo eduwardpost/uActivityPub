@@ -1,7 +1,7 @@
 ﻿using uActivityPub.Models;
 using Umbraco.Cms.Core.Models;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ContentServices;
 
 public interface IActivityHelper
 {

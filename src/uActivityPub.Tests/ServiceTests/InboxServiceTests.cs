@@ -11,6 +11,8 @@ using Newtonsoft.Json.Linq;
 using uActivityPub.Data;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Services.ActivityPubServices;
+using uActivityPub.Services.HelperServices;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Web;
@@ -27,7 +29,7 @@ public class InboxServiceTests
     private readonly Mock<IUmbracoDatabase> _dataBaseMock;
     private readonly Mock<ISignatureService> _signatureServiceMock;
     private readonly Fixture _fixture;
-    private Mock<ISingedRequestHandler> _singedRequestHandlerMock;
+    private readonly Mock<ISingedRequestHandler> _singedRequestHandlerMock;
 
     public InboxServiceTests()
     {

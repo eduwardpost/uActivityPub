@@ -25,6 +25,7 @@
                 
                 vm.settings.singleUserMode = (response.data.find((setting) => setting.Key === 'singleUserMode').Value === "true")
                 vm.settings.singleUserModeUserName = response.data.find((setting) => setting.Key === 'singleUserModeUserName').Value
+                vm.settings.gravatarEmail = response.data.find((setting) => setting.Key === 'gravatarEmail').Value
                 vm.settings.contentTypeAlias = response.data.find((setting) => setting.Key === 'contentTypeAlias').Value
                 vm.settings.listContentTypeAlias = response.data.find((setting) => setting.Key === 'listContentTypeAlias').Value
                 vm.settings.authorName = response.data.find((setting) => setting.Key === 'authorName').Value
@@ -32,7 +33,7 @@
                 console.log(vm.settings);
                 $scope.loaded = true;
             }, function errorCallback(response) {
-                notificationsService.error("Error", "Spelers toevoegen mislukt: " + response.status);
+                notificationsService.error("Error", "Could not load settings: " + response.status);
             });
         }
         

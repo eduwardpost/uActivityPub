@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Services.ActivityPubServices;
+using uActivityPub.Services.ContentServices;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;
@@ -33,7 +35,7 @@ public class OutboxServiceTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
 
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
         
         var rootContentMock = new Mock<IContent>();
         rootContentMock.Setup(x => x.Id)
@@ -105,7 +107,7 @@ public class OutboxServiceTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
         
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
         
         contentServiceMock.Setup(x => x.GetRootContent())
             .Returns(new List<IContent>());
@@ -132,7 +134,7 @@ public class OutboxServiceTests
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
         
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(uActivitySettingsHelper.GetSettings);
+            .Returns(UActivitySettingsHelper.GetSettings);
 
         var rootContentMock = new Mock<IContent>();
         rootContentMock.Setup(x => x.Id)

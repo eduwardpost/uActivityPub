@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using uActivityPub.Models;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.HelperServices;
 
 public interface ISignatureService
 {
