@@ -58,17 +58,17 @@ public class ActivityPubControllerTests
             .Returns(_umbracoDatabaseMock.Object);
 
         var settings = UActivitySettingsHelper.GetSettings();
-        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
+        settings.First(s => s.Key == UActivitySettingKeys.SingleUserMode).Value = "true";
 
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(settings);
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings()
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings()
             {
                 Value = "true"
             });
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserModeUserName))
-            .Returns(new uActivitySettings()
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserModeUserName))
+            .Returns(new UActivitySettings()
             {
                 Value = "uActivityPub"
             });

@@ -13,15 +13,15 @@ public class UActivitySettingsService : IUActivitySettingsService
         _databaseFactory = databaseFactory;
     }
     
-    public IEnumerable<uActivitySettings>? GetAllSettings()
+    public IEnumerable<UActivitySettings>? GetAllSettings()
     {
         var database = _databaseFactory.CreateDatabase();
-        var settings = database.Fetch<uActivitySettings>($"SELECT * FROM {uActivitySettingKeys.TableName}");
+        var settings = database.Fetch<UActivitySettings>($"SELECT * FROM {UActivitySettingKeys.TableName}");
 
         return settings;
     }
 
-    public uActivitySettings? GetSettings(string key)
+    public UActivitySettings? GetSettings(string key)
     {
         var settings = GetAllSettings();
 

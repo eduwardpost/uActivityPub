@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using uActivityPub.Helpers;
-using uActivityPub.Models;
 using uActivityPub.Services;
 using uActivityPub.Services.ContentServices;
 using uActivityPub.Tests.TestHelpers;
@@ -59,7 +58,7 @@ public class ActorServiceTests
         const string userName = "uActivityPub";
         
         var settings = UActivitySettingsHelper.GetSettings();
-        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
+        settings.First(s => s.Key == UActivitySettingKeys.SingleUserMode).Value = "true";
         
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(settings);
@@ -81,7 +80,7 @@ public class ActorServiceTests
         const string actorUserName = "uactivitypub";
     
         var settings = UActivitySettingsHelper.GetSettings();
-        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
+        settings.First(s => s.Key == UActivitySettingKeys.SingleUserMode).Value = "true";
     
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
         
@@ -115,7 +114,7 @@ public class ActorServiceTests
             .Returns($"{actorUserName}@unit.test");
         
         var settings = UActivitySettingsHelper.GetSettings();
-        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "false";
+        settings.First(s => s.Key == UActivitySettingKeys.SingleUserMode).Value = "false";
     
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
         

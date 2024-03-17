@@ -4,6 +4,6 @@ namespace uActivityPub.Services;
 
 public interface IUActivitySettingsService
 {
-    IEnumerable<uActivitySettings>? GetAllSettings();
-    uActivitySettings? GetSettings(string key);
+    IEnumerable<UActivitySettings>? GetAllSettings();
+    UActivitySettings? GetSettings(string key);
 }

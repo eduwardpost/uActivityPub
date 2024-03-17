@@ -25,7 +25,7 @@ public class UActivityPubDashboardApiController : UmbracoAuthorizedJsonControlle
     public bool GetApi() => true;
 
     
-    public IEnumerable<uActivitySettings>? GetSettings()
+    public IEnumerable<UActivitySettings>? GetSettings()
     {
         return _uActivitySettingsService.GetAllSettings();
     }

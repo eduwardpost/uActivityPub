@@ -47,11 +47,11 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(UActivitySettingsHelper.GetSettings);
 
-        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-                    .Returns(new uActivitySettings
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+                    .Returns(new UActivitySettings
                     {
                         Id = 4,
-                        Key = uActivitySettingKeys.SingleUserMode,
+                        Key = UActivitySettingKeys.SingleUserMode,
                         Value = "false"
                     });
 
@@ -148,11 +148,11 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(UActivitySettingsHelper.GetSettings);
 
-        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 4,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "false"
             });
 
@@ -395,12 +395,12 @@ public class ContentPublishPostHandlerTests
         var contentTypeMock = new Mock<ISimpleContentType>();
         var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
-            .Returns(new List<uActivitySettings>
+            .Returns(new List<UActivitySettings>
             {
                 new()
                 {
                     Id = 1,
-                    Key = uActivitySettingKeys.ContentTypeAlias,
+                    Key = UActivitySettingKeys.ContentTypeAlias,
                     Value = "unit"
                 }
             });
@@ -451,11 +451,11 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(UActivitySettingsHelper.GetSettings);
 
-        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 4,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "false"
             });
         
@@ -545,11 +545,11 @@ public class ContentPublishPostHandlerTests
         iUActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(UActivitySettingsHelper.GetSettings);
         
-        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        iUActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 4,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "false"
             });
 

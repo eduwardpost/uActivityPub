@@ -14,73 +14,73 @@ public class SettingSeedHelper(IUmbracoDatabaseFactory databaseFactory)
     {
         var database = databaseFactory.CreateDatabase();
 
-        var settings = database.Fetch<uActivitySettings>($"SELECT * FROM {uActivitySettingKeys.TableName}") 
+        var settings = database.Fetch<UActivitySettings>($"SELECT * FROM {UActivitySettingKeys.TableName}") 
                        ?? [];
 
-        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.SingleUserMode))
+        if (settings.TrueForAll(s => s.Key != UActivitySettingKeys.SingleUserMode))
             AddSingleUserModeSettings(database);        
         
-        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.ContentTypeAlias))
+        if (settings.TrueForAll(s => s.Key != UActivitySettingKeys.ContentTypeAlias))
             AddContentTypeAliasSettings(database);
         
-        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.GravatarEmail))
+        if (settings.TrueForAll(s => s.Key != UActivitySettingKeys.GravatarEmail))
             AddGravatarEmailSetting(database);
     }
 
     private static void AddSingleUserModeSettings(IDatabase database)
     {
-        var singleUserModeSetting = new uActivitySettings()
+        var singleUserModeSetting = new UActivitySettings()
         {
-            Key = uActivitySettingKeys.SingleUserMode,
+            Key = UActivitySettingKeys.SingleUserMode,
             Value = "false"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, singleUserModeSetting);
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, singleUserModeSetting);
         
-        var singleUserModeName = new uActivitySettings()
+        var singleUserModeName = new UActivitySettings()
         {
-            Key = uActivitySettingKeys.SingleUserModeUserName,
+            Key = UActivitySettingKeys.SingleUserModeUserName,
             Value = "uActivityPub"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, singleUserModeName);
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, singleUserModeName);
     }
     
     private static void AddContentTypeAliasSettings(IDatabase database)
     {
-        var contentTypeAlias = new uActivitySettings
+        var contentTypeAlias = new UActivitySettings
         {
-            Key = uActivitySettingKeys.ContentTypeAlias,
+            Key = UActivitySettingKeys.ContentTypeAlias,
             Value = "article"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, contentTypeAlias);        
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, contentTypeAlias);        
         
-        var listContentTypeAlias = new uActivitySettings
+        var listContentTypeAlias = new UActivitySettings
         {
-            Key = uActivitySettingKeys.ListContentTypeAlias,
+            Key = UActivitySettingKeys.ListContentTypeAlias,
             Value = "articleList"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, listContentTypeAlias);
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, listContentTypeAlias);
         
-        var userNameContentAlias = new uActivitySettings
+        var userNameContentAlias = new UActivitySettings
         {
-            Key = uActivitySettingKeys.UserNameContentAlias,
+            Key = UActivitySettingKeys.UserNameContentAlias,
             Value = "authorName"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, userNameContentAlias);
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, userNameContentAlias);
     }
     
     private static void AddGravatarEmailSetting(IDatabase database)
     {
-        var singleUserModeSetting = new uActivitySettings()
+        var singleUserModeSetting = new UActivitySettings()
         {
-            Key = uActivitySettingKeys.GravatarEmail,
+            Key = UActivitySettingKeys.GravatarEmail,
             Value = "info@uactivitypub.com"
         };
         
-        database.Insert(uActivitySettingKeys.TableName, "Id", true, singleUserModeSetting);
+        database.Insert(UActivitySettingKeys.TableName, "Id", true, singleUserModeSetting);
     }
 }
