@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection.XmlEncryption;
-using uActivityPub.Data;
+﻿using uActivityPub.Data;
 using uActivityPub.Helpers;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Infrastructure.Persistence;

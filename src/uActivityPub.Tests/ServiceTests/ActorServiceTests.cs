@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using uActivityPub.Helpers;
-using uActivityPub.Models;
 using uActivityPub.Services;
 using uActivityPub.Services.ContentServices;
 using uActivityPub.Tests.TestHelpers;

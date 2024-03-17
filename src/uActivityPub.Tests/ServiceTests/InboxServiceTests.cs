@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using uActivityPub.Data;
 using uActivityPub.Models;
-using uActivityPub.Services;
 using uActivityPub.Services.ActivityPubServices;
 using uActivityPub.Services.HelperServices;
 using Umbraco.Cms.Core.Configuration.Models;

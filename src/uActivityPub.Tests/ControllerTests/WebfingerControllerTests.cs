@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -132,13 +130,13 @@ public class WebfingerControllerTests
         var objectResponse = response.Result as OkObjectResult;
         objectResponse.Should().NotBeNull();
         objectResponse!.Value.Should().NotBeNull();
-        var webFingerResponse = objectResponse!.Value as WebFingerResponse;
+        var webFingerResponse = objectResponse.Value as WebFingerResponse;
         webFingerResponse.Should().NotBeNull();
         webFingerResponse!.Subject.Should().Be("acct:uActivityPub@umbracoSite.domain");
         webFingerResponse.Links.Length.Should().Be(1);
-        webFingerResponse.Links.First().Rel.Should().Be("self");
-        webFingerResponse.Links.First().Type.Should().Be("application/activity+json");
-        webFingerResponse.Links.First().Href.Should().Be("https://localhost.test/activitypub/actor/uactivitypub");
+        webFingerResponse.Links[0].Rel.Should().Be("self");
+        webFingerResponse.Links[0].Type.Should().Be("application/activity+json");
+        webFingerResponse.Links[0].Href.Should().Be("https://localhost.test/activitypub/actor/uactivitypub");
     }
     
     [Fact]
@@ -181,13 +179,13 @@ public class WebfingerControllerTests
         var objectResponse = response.Result as OkObjectResult;
         objectResponse.Should().NotBeNull();
         objectResponse!.Value.Should().NotBeNull();
-        var webFingerResponse = objectResponse!.Value as WebFingerResponse;
+        var webFingerResponse = objectResponse.Value as WebFingerResponse;
         webFingerResponse.Should().NotBeNull();
         webFingerResponse!.Subject.Should().Be("acct:uActivityPub@umbracoSite.domain");
         webFingerResponse.Links.Length.Should().Be(1);
-        webFingerResponse.Links.First().Rel.Should().Be("self");
-        webFingerResponse.Links.First().Type.Should().Be("application/activity+json");
-        webFingerResponse.Links.First().Href.Should().Be("https://localhost.test/activitypub/actor/uactivitypub");
+        webFingerResponse.Links[0].Rel.Should().Be("self");
+        webFingerResponse.Links[0].Type.Should().Be("application/activity+json");
+        webFingerResponse.Links[0].Href.Should().Be("https://localhost.test/activitypub/actor/uactivitypub");
     }
     
     [Fact]
