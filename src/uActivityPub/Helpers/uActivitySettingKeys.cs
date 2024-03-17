@@ -1,7 +1,6 @@
 ﻿namespace uActivityPub.Helpers;
 
-// ReSharper disable once InconsistentNaming
-public static class uActivitySettingKeys
+public static class UActivitySettingKeys
 {
     public const string TableName = "uActivitySettings";
     public const string SingleUserMode = "singleUserMode";

@@ -24,27 +24,27 @@ public class WebfingerController(
         if (resource.Count == 0)
             return BadRequest("Can't search for something without resource request");
 
-        var requestedResource = resource.First();
+        var requestedResource = resource[0];
 
         if (string.IsNullOrEmpty(requestedResource))
             return BadRequest("Can't search for something without resource request");
 
         var requestParts = requestedResource.Split(":");
 
-        switch (requestParts.First())
+        switch (requestParts[0])
         {
             case "acct":
-                return GetAccount(requestParts.Last(), requestedResource);
+                return GetAccount(requestParts[^1], requestedResource);
             default:
-                return BadRequest($"request type {requestParts.First()} is not supported");
+                return BadRequest($"request type {requestParts[0]} is not supported");
         }
     }
 
     private ActionResult<WebFingerResponse> GetAccount(string last, string requestedResource)
     {
-        var userName = last.Split('@').First().ToLower();
+        var userName = last.Split('@')[0].ToLower();
 
-        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        if (uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
             var user = userService.GetAll(0, 100, out _).FirstOrDefault(u => u.ActivityPubUserName() == userName);
 
@@ -66,7 +66,7 @@ public class WebfingerController(
             });
         }
 
-        var singleUserModeName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName);
+        var singleUserModeName = uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserModeUserName);
 
         return Ok(new WebFingerResponse
         {

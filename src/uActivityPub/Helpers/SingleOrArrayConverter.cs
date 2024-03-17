@@ -20,7 +20,7 @@ public class SingleOrArrayConverter<TEnumeratingObject> : JsonConverter<IEnumera
             var items = value.ToList();
             
             if(items.Count == 1) {
-                JsonSerializer.Serialize(writer, items.First(), items.First()?.GetType() ?? throw new InvalidOperationException(), options);
+                JsonSerializer.Serialize(writer, items[0], items[0]?.GetType() ?? throw new InvalidOperationException(), options);
             }
             else {
                 JsonSerializer.Serialize(writer, items, items.GetType(), options);

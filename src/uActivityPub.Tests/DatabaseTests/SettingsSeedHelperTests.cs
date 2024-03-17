@@ -32,6 +32,6 @@ public class SettingsSeedHelperTests
         _unitUnderTest.Handle(notification);
         
         // Assert
-        _dataBaseMock.Verify(x => x.Insert(uActivitySettingKeys.TableName, primaryKeyName, true, It.IsAny<uActivitySettings>()), Times.Exactly(6));
+        _dataBaseMock.Verify(x => x.Insert(UActivitySettingKeys.TableName, primaryKeyName, true, It.IsAny<UActivitySettings>()), Times.Exactly(6));
     }
 }

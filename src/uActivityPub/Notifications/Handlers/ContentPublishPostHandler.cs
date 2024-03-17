@@ -47,8 +47,8 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
     public void Handle(ContentPublishedNotification notification)
     {
         var settings = _uActivitySettingsService.GetAllSettings()?.ToList();
-        var contentAlias = settings?.Find(s => s.Key == uActivitySettingKeys.ContentTypeAlias);
-        var userPropertyAlias = settings?.Find(s => s.Key == uActivitySettingKeys.UserNameContentAlias);
+        var contentAlias = settings?.Find(s => s.Key == UActivitySettingKeys.ContentTypeAlias);
+        var userPropertyAlias = settings?.Find(s => s.Key == UActivitySettingKeys.UserNameContentAlias);
 
         if (contentAlias == null)
             throw new InvalidOperationException("Could not find configured key for the content type");
@@ -74,7 +74,7 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
         string userName;
         int userId;
 
-        if (_uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        if (_uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
             userId = post.GetValue<int>(userPropertyAlias.Value);
             var user = _userService.GetUserById(userId);
@@ -87,8 +87,8 @@ public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNo
         }
         else
         {
-            userName = _uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
-            userId = uActivitySettingKeys.SingleUserModeUserId;
+            userName = _uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserModeUserName)!.Value;
+            userId = UActivitySettingKeys.SingleUserModeUserId;
         }
             
         var actor = $"{_webRoutingSettings.Value.UmbracoApplicationUrl}activitypub/actor/{userName}";

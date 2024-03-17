@@ -19,11 +19,11 @@ public class ActorService(
         using var scope = scopeProvider.CreateScope();
         var settings = settingsService.GetAllSettings()?.ToList();
         
-        var singleUserMode = settings!.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value == "true";
-        var gravatarEmail = settings!.First(s => s.Key == uActivitySettingKeys.GravatarEmail).Value;
+        var singleUserMode = settings!.First(s => s.Key == UActivitySettingKeys.SingleUserMode).Value == "true";
+        var gravatarEmail = settings!.First(s => s.Key == UActivitySettingKeys.GravatarEmail).Value;
 
         var activityPubUserName = user?.ActivityPubUserName() ?? user?.Id.ToString() ?? userName.ToLowerInvariant();
-        var userId = singleUserMode ? uActivitySettingKeys.SingleUserModeUserId : user!.Id;
+        var userId = singleUserMode ? UActivitySettingKeys.SingleUserModeUserId : user!.Id;
 
         var userKey = scope.Database.FirstOrDefault<UserKeysSchema>("SELECT * FROM userKeys WHERE UserId = @0",
             userId);

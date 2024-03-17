@@ -6,49 +6,49 @@ namespace uActivityPub.Tests.TestHelpers;
 
 public static class UActivitySettingsHelper
 {
-   public static List<uActivitySettings> GetSettings()
+   public static List<UActivitySettings> GetSettings()
    {
       return
       [
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 1,
-            Key = uActivitySettingKeys.ContentTypeAlias,
+            Key = UActivitySettingKeys.ContentTypeAlias,
             Value = "article"
          },
 
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 2,
-            Key = uActivitySettingKeys.ListContentTypeAlias,
+            Key = UActivitySettingKeys.ListContentTypeAlias,
             Value = "articleList"
          },
 
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 3,
-            Key = uActivitySettingKeys.UserNameContentAlias,
+            Key = UActivitySettingKeys.UserNameContentAlias,
             Value = "author"
          },
 
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 4,
-            Key = uActivitySettingKeys.SingleUserMode,
+            Key = UActivitySettingKeys.SingleUserMode,
             Value = "false"
          },
 
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 5,
-            Key = uActivitySettingKeys.SingleUserModeUserName,
+            Key = UActivitySettingKeys.SingleUserModeUserName,
             Value = "uActivityPub"
          },
 
-         new uActivitySettings()
+         new UActivitySettings()
          {
             Id = 6,
-            Key = uActivitySettingKeys.GravatarEmail,
+            Key = UActivitySettingKeys.GravatarEmail,
             Value = "info@uactivitypub.com"
          }
       ];

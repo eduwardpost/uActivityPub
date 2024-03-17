@@ -26,7 +26,7 @@ public class OutboxService : IOutboxService
     public OrderedCollection<Activity>? GetPublicOutbox(string userName)
     {
         var settings = _uActivitySettingsService.GetAllSettings();
-        var contentListAlias = settings?.FirstOrDefault(s => s.Key == uActivitySettingKeys.ListContentTypeAlias);
+        var contentListAlias = settings?.FirstOrDefault(s => s.Key == UActivitySettingKeys.ListContentTypeAlias);
         
         if (contentListAlias == null)
             throw new InvalidOperationException("Could not find configured key for the content list type");

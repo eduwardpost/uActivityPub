@@ -27,7 +27,7 @@ public class ActivityPubController(
     public ActionResult<Actor> GetActor(string userName)
     {
         Actor actor;
-        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        if (uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
             var user = userService.GetUserByActivityPubName(userName);
             if (user == null)
@@ -37,7 +37,7 @@ public class ActivityPubController(
         }
         else
         {
-            var user = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            var user = uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserModeUserName)!.Value;
             actor = actorService.GetActor(user);
         }
         
@@ -76,7 +76,7 @@ public class ActivityPubController(
         string activityPubUserName;
         int userId;
 
-        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        if (uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
             var user = userService.GetUserByActivityPubName(userName);
             if (user == null)
@@ -87,8 +87,8 @@ public class ActivityPubController(
         }
         else
         {
-            userId = uActivitySettingKeys.SingleUserModeUserId;
-            activityPubUserName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            userId = UActivitySettingKeys.SingleUserModeUserId;
+            activityPubUserName = uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserModeUserName)!.Value;
         }
 
         var signature = Request.Headers["Signature"].FirstOrDefault() ?? string.Empty;
@@ -113,7 +113,7 @@ public class ActivityPubController(
     public ActionResult<OrderedCollection> GetOutbox(string userName)
     {
         OrderedCollection<Activity>? outbox;
-        if (uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserMode)!.Value == "false")
+        if (uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserMode)!.Value == "false")
         {
             var user = userService.GetUserByActivityPubName(userName);
             if (user == null)
@@ -123,7 +123,7 @@ public class ActivityPubController(
         }
         else
         {
-            var activityPubUserName = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
+            var activityPubUserName = uActivitySettingsService.GetSettings(UActivitySettingKeys.SingleUserModeUserName)!.Value;
             outbox = outboxService.GetPublicOutbox(activityPubUserName);
         }
 

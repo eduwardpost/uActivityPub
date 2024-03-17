@@ -31,7 +31,7 @@ public class UActivitySettingsServiceTests
     public void GetAllSettings_Returns_All_Settings_In_Database()
     {
         // Arrange
-        _dataBaseMock.Setup(x => x.Fetch<uActivitySettings>(It.IsAny<string>()))
+        _dataBaseMock.Setup(x => x.Fetch<UActivitySettings>(It.IsAny<string>()))
             .Returns(UActivitySettingsHelper.GetSettings());
         
         // Act
@@ -46,14 +46,14 @@ public class UActivitySettingsServiceTests
     public void GetSetting_Returns_Specific_Settings_In_Database()
     {
         // Arrange
-        _dataBaseMock.Setup(x => x.Fetch<uActivitySettings>(It.IsAny<string>()))
+        _dataBaseMock.Setup(x => x.Fetch<UActivitySettings>(It.IsAny<string>()))
             .Returns(UActivitySettingsHelper.GetSettings());
         
         // Act
-        var setting = _unitUnderTest.GetSettings(uActivitySettingKeys.SingleUserMode);
+        var setting = _unitUnderTest.GetSettings(UActivitySettingKeys.SingleUserMode);
 
         // Assert
         setting.Should().NotBeNull();
-        setting!.Key.Should().Be(uActivitySettingKeys.SingleUserMode);
+        setting!.Key.Should().Be(UActivitySettingKeys.SingleUserMode);
     }
 }

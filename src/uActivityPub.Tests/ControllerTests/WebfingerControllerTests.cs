@@ -103,19 +103,19 @@ public class WebfingerControllerTests
         var collectionStore = new Dictionary<string, StringValues> { { "resource", "acct:uActivityPub@umbracoSite.domain" } };
         _unitUnderTest.ControllerContext.HttpContext.Request.Query = new QueryCollection(collectionStore);
 
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 1,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "true"
             });
         
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserModeUserName))
-            .Returns(new uActivitySettings
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserModeUserName))
+            .Returns(new UActivitySettings
             {
                 Id = 2,
-                Key = uActivitySettingKeys.SingleUserModeUserName,
+                Key = UActivitySettingKeys.SingleUserModeUserName,
                 Value = "uActivityPub"
             });
         
@@ -150,11 +150,11 @@ public class WebfingerControllerTests
         var collectionStore = new Dictionary<string, StringValues> { { "resource", "acct:uActivityPub@umbracoSite.domain" } };
         _unitUnderTest.ControllerContext.HttpContext.Request.Query = new QueryCollection(collectionStore);
 
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 1,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "false"
             });
 
@@ -199,11 +199,11 @@ public class WebfingerControllerTests
         var collectionStore = new Dictionary<string, StringValues> { { "resource", "acct:uActivityPub@umbracoSite.domain" } };
         _unitUnderTest.ControllerContext.HttpContext.Request.Query = new QueryCollection(collectionStore);
 
-        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
-            .Returns(new uActivitySettings
+        _uActivitySettingsServiceMock.Setup(x => x.GetSettings(UActivitySettingKeys.SingleUserMode))
+            .Returns(new UActivitySettings
             {
                 Id = 1,
-                Key = uActivitySettingKeys.SingleUserMode,
+                Key = UActivitySettingKeys.SingleUserMode,
                 Value = "false"
             });
 

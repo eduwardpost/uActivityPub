@@ -5,11 +5,10 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace uActivityPub.Data;
 
-// ReSharper disable once InconsistentNaming
-[TableName(uActivitySettingKeys.TableName)]
+[TableName(UActivitySettingKeys.TableName)]
 [PrimaryKey("Id", AutoIncrement = true)]
 [ExplicitColumns]
-public class uActivitySettings
+public class UActivitySettings
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [PrimaryKeyColumn(AutoIncrement = true, IdentitySeed = 1)]
