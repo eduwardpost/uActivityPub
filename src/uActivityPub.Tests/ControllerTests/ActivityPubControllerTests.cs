@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,6 +10,7 @@ using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
 using uActivityPub.Services.ActivityPubServices;
+using uActivityPub.Services.ContentServices;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Scoping;
@@ -25,6 +27,7 @@ public class ActivityPubControllerTests
     private readonly Mock<IInboxService> _inboxServiceMock = new Mock<IInboxService>();
     private readonly Mock<IOutboxService> _outboxServiceMock = new Mock<IOutboxService>();
     private readonly Mock<IUmbracoDatabase> _umbracoDatabaseMock = new Mock<IUmbracoDatabase>();
+    private readonly Mock<IActorService> _actorServiceMock = new Mock<IActorService>();
 
 
     private readonly Mock<IOptions<WebRoutingSettings>> _webRoutingSettingsMock =
@@ -45,18 +48,18 @@ public class ActivityPubControllerTests
         {
             UmbracoApplicationUrl = baseApplicationUrl
         });
-        
-        
+
+
         var scopeMock = new Mock<IScope>();
         _scopeProviderMock.Setup(x => x.CreateScope(It.IsAny<IsolationLevel>(), It.IsAny<RepositoryCacheMode>(), null,
                 null, null, false, false))
             .Returns(scopeMock.Object);
         scopeMock.Setup(x => x.Database)
             .Returns(_umbracoDatabaseMock.Object);
-        
+
         var settings = UActivitySettingsHelper.GetSettings();
         settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
-        
+
         _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
             .Returns(settings);
         _uActivitySettingsServiceMock.Setup(x => x.GetSettings(uActivitySettingKeys.SingleUserMode))
@@ -69,12 +72,11 @@ public class ActivityPubControllerTests
             {
                 Value = "uActivityPub"
             });
-        
-        
+
+
         _unitUnderTest = new ActivityPubController(_userServiceMock.Object, _inboxServiceMock.Object,
             _outboxServiceMock.Object, _scopeProviderMock.Object,
-            _uActivitySettingsServiceMock.Object);
-        
+            _uActivitySettingsServiceMock.Object, _actorServiceMock.Object);
     }
 
 
@@ -83,7 +85,12 @@ public class ActivityPubControllerTests
     {
         // Arrange
         const string actorName = "uactivitypub";
-        
+
+        var fixture = new Fixture();
+
+        var actorFixture = fixture.Build<Actor>().With(x => x.PreferredUsername, actorName).Create();
+        _actorServiceMock.Setup(x => x.GetActor(It.IsAny<string>(), null)).Returns(actorFixture);
+
         // Act
         var actor = _unitUnderTest.GetActor(actorName);
 
