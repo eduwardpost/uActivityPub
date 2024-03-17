@@ -28,6 +28,9 @@ public class SettingSeedHelper : INotificationHandler<UmbracoApplicationStartedN
         
         if (settings.All(s => s.Key != uActivitySettingKeys.ContentTypeAlias))
             AddContentTypeAliasSettings(database);
+        
+        if (settings.All(s => s.Key != uActivitySettingKeys.GravatarEmail))
+            AddGravatarEmailSetting(database);
     }
 
     private static void AddSingleUserModeSettings(IDatabase database)
@@ -74,5 +77,16 @@ public class SettingSeedHelper : INotificationHandler<UmbracoApplicationStartedN
         };
         
         database.Insert(uActivitySettingKeys.TableName, "Id", true, userNameContentAlias);
+    }
+    
+    private static void AddGravatarEmailSetting(IDatabase database)
+    {
+        var singleUserModeSetting = new uActivitySettings()
+        {
+            Key = uActivitySettingKeys.GravatarEmail,
+            Value = "info@uactivitypub.com"
+        };
+        
+        database.Insert(uActivitySettingKeys.TableName, "Id", true, singleUserModeSetting);
     }
 }
