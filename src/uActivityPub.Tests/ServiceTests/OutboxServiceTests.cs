@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
 using uActivityPub.Services;
@@ -163,5 +165,22 @@ public class OutboxServiceTests
         //Assert
         Assert.Null(outbox);
     }
-    
+
+    [Fact]
+    public void GetPublicOutbox_Throws_InvalidOperationException_When_ContentListAliasSetting_Is_Null()
+    {
+        // Arrange
+        
+        var iUActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        
+        var unitUnderTest = new OutboxService(
+            null!,
+            _webRouterSettingsMock.Object,
+            null!,
+            iUActivitySettingsServiceMock.Object);
+        
+        // Act & Assert
+        unitUnderTest.Invoking(x => x.GetPublicOutbox("uActivityPub"))
+            .Should().ThrowExactly<InvalidOperationException>();
+    }
 }
