@@ -8,6 +8,7 @@ using uActivityPub.Data;
 using uActivityPub.Helpers;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Services.ActivityPubServices;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Scoping;

@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.HelperServices;
 
 public class SingedRequestHandler : ISingedRequestHandler
 {

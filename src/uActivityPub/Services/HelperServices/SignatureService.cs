@@ -8,7 +8,7 @@ using uActivityPub.Models;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Infrastructure.Persistence;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.HelperServices;
 
 public class SignatureService(
     IUmbracoDatabaseFactory databaseFactory,

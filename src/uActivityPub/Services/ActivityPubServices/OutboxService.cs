@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Options;
 using uActivityPub.Helpers;
 using uActivityPub.Models;
+using uActivityPub.Services.ContentServices;
 using Umbraco.Cms.Core.Configuration.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Services;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ActivityPubServices;
 
 public class OutboxService : IOutboxService
 {

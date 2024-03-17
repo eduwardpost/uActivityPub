@@ -1,7 +1,6 @@
 using uActivityPub.Models;
-using Umbraco.Cms.Core.Models.Membership;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ActivityPubServices;
 
 public interface IOutboxService
 {

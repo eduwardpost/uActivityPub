@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Options;
 using uActivityPub.Models;
 using uActivityPub.Services;
+using uActivityPub.Services.ActivityPubServices;
+using uActivityPub.Services.ContentServices;
 using uActivityPub.Tests.TestHelpers;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models;

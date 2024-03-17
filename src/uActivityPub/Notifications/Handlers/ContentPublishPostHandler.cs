@@ -3,13 +3,16 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using uActivityPub.Data;
 using uActivityPub.Helpers;
+using uActivityPub.Services;
+using uActivityPub.Services.ContentServices;
+using uActivityPub.Services.HelperServices;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Persistence;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Notifications.Handlers;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class ContentPublishPostHandler : INotificationHandler<ContentPublishedNotification>

@@ -4,7 +4,7 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Extensions;
 
-namespace uActivityPub.Notifications;
+namespace uActivityPub.Notifications.Handlers;
 
 public class uActivityPubServerVariablesHandler  : INotificationHandler<ServerVariablesParsingNotification>
 {

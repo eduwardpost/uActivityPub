@@ -8,6 +8,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.Common.Controllers;
 using uActivityPub.Helpers;
 using uActivityPub.Services;
+using uActivityPub.Services.ActivityPubServices;
 
 namespace uActivityPub.Controllers;
 

@@ -6,7 +6,7 @@ using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace uActivityPub.Services;
+namespace uActivityPub.Services.ContentServices;
 
 public class ActivityHelper : IActivityHelper
 {
