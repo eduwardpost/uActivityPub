@@ -6,12 +6,12 @@ using Umbraco.Extensions;
 
 namespace uActivityPub.Notifications.Handlers;
 
-public class uActivityPubServerVariablesHandler  : INotificationHandler<ServerVariablesParsingNotification>
+public class UActivityPubServerVariablesHandler  : INotificationHandler<ServerVariablesParsingNotification>
 {
     private readonly LinkGenerator _linkGenerator;
 
     /// <inheritdoc cref="INotificationHandler{TNotification}" />
-    public uActivityPubServerVariablesHandler(LinkGenerator linkGenerator)
+    public UActivityPubServerVariablesHandler(LinkGenerator linkGenerator)
     {
         _linkGenerator = linkGenerator ?? throw new ArgumentNullException(nameof(linkGenerator));    
     }

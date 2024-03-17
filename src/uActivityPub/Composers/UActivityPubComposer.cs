@@ -30,7 +30,7 @@ public class UActivityPubComposer : IComposer
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunUActivitySettingsMigration>();
         builder.AddNotificationHandler<UmbracoApplicationStartedNotification, SettingSeedHelper>();
         builder.AddNotificationHandler<ContentPublishedNotification , ContentPublishPostHandler>();
-        builder.AddNotificationHandler<ServerVariablesParsingNotification, uActivityPubServerVariablesHandler>();
+        builder.AddNotificationHandler<ServerVariablesParsingNotification, UActivityPubServerVariablesHandler>();
         builder.Services.AddTransient<IInboxService, InboxService>();
         builder.Services.AddTransient<IOutboxService, OutboxService>();
         builder.Services.AddTransient<ISignatureService, SignatureService>();
