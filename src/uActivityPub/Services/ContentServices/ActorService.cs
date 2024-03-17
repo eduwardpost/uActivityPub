@@ -17,7 +17,7 @@ public class ActorService(
     public Actor GetActor(string userName, IUser? user = null)
     {
         using var scope = scopeProvider.CreateScope();
-        var settings = settingsService.GetAllSettings();
+        var settings = settingsService.GetAllSettings()?.ToList();
         
         var singleUserMode = settings!.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value == "true";
         var gravatarEmail = settings!.First(s => s.Key == uActivitySettingKeys.GravatarEmail).Value;

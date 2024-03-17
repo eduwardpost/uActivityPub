@@ -34,7 +34,11 @@ public class ActorServiceTests
             UmbracoApplicationUrl = baseApplicationUrl
         });
 
+        var settings = UActivitySettingsHelper.GetSettings();
         _uActivitySettingsServiceMock = new Mock<IUActivitySettingsService>();
+        _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(settings);
+        
         _scopeProviderMock = new Mock<IScopeProvider>();
         _umbracoDatabaseMock = new Mock<IUmbracoDatabase>();
         var scopeMock = new Mock<IScope>();
@@ -54,6 +58,12 @@ public class ActorServiceTests
         // Arrange
         const string userName = "uActivityPub";
         
+        var settings = UActivitySettingsHelper.GetSettings();
+        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
+        
+        _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings())
+            .Returns(settings);
+        
         //Act
         var actor = _unitUnderTest.GetActor(userName);
         
@@ -61,65 +71,66 @@ public class ActorServiceTests
         actor.Type.Should().Be("Person");
         actor.Context.Should().Contain("https://www.w3.org/ns/activitystreams");
         actor.Context.Should().Contain("https://w3id.org/security/v1");
+        actor.PreferredUsername.Should().Be(userName.ToLowerInvariant());
     }
 
-    // [Fact]
-    // public void Calling_Parameter_Constructor_In_SingleUserMode_Creates_Actor()
-    // {
-    //     // Arrange
-    //     const string actorUserName = "uactivitypub";
-    //
-    //     var settings = UActivitySettingsHelper.GetSettings();
-    //     settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
-    //
-    //     _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
-    //     
-    //     // Act
-    //     var actor = new Actor(actorUserName, _webRouterSettingsMock.Object, _uActivitySettingsServiceMock.Object,
-    //         _scopeProviderMock.Object);
-    //     
-    //     // Assert
-    //     actor.Should().NotBeNull();
-    //     actor.PreferredUsername.Should().Be(actorUserName);
-    //     actor.Id.Should().Contain(actorUserName);
-    //     actor.Inbox.Should().Contain(actorUserName);
-    //     actor.Outbox.Should().Contain(actorUserName);
-    //     actor.Followers.Should().Contain(actorUserName);
-    //     actor.Icon.Should().NotBeNull();
-    //     actor.Icon!.Url.Should().NotBeNull();
-    //     actor.PublicKey.Should().NotBeNull();
-    // }
-    //
-    // [Fact]
-    // public void Calling_Parameter_Constructor_In_MultiUserMode_Creates_Actor()
-    // {
-    //     // Arrange
-    //     const string actorUserName = "uactivitypub";
-    //     var user = new Mock<IUser>();
-    //     user.Setup(x => x.Name)
-    //         .Returns(actorUserName);
-    //     user.Setup(x => x.Id)
-    //         .Returns(1);
-    //     user.Setup(x => x.Email)
-    //         .Returns($"{actorUserName}@unit.test");
-    //     
-    //     var settings = UActivitySettingsHelper.GetSettings();
-    //
-    //     _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
-    //     
-    //     // Act
-    //     var actor = new Actor(actorUserName, _webRouterSettingsMock.Object, _uActivitySettingsServiceMock.Object,
-    //         _scopeProviderMock.Object, user.Object);
-    //     
-    //     // Assert
-    //     actor.Should().NotBeNull();
-    //     actor.PreferredUsername.Should().Be(actorUserName);
-    //     actor.Id.Should().Contain(actorUserName);
-    //     actor.Inbox.Should().Contain(actorUserName);
-    //     actor.Outbox.Should().Contain(actorUserName);
-    //     actor.Followers.Should().Contain(actorUserName);
-    //     actor.Icon.Should().NotBeNull();
-    //     actor.Icon!.Url.Should().NotBeNull();
-    //     actor.PublicKey.Should().NotBeNull();
-    // }
+    [Fact]
+    public void GetActor_In_SingleUserMode_Creates_Actor()
+    {
+        // Arrange
+        const string actorUserName = "uactivitypub";
+    
+        var settings = UActivitySettingsHelper.GetSettings();
+        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "true";
+    
+        _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
+        
+        // Act
+        var actor = _unitUnderTest.GetActor(actorUserName);
+        
+        // Assert
+        actor.Should().NotBeNull();
+        actor.PreferredUsername.Should().Be(actorUserName);
+        actor.Id.Should().Contain(actorUserName);
+        actor.Inbox.Should().Contain(actorUserName);
+        actor.Outbox.Should().Contain(actorUserName);
+        actor.Followers.Should().Contain(actorUserName);
+        actor.Icon.Should().NotBeNull();
+        actor.Icon!.Url.Should().NotBeNull();
+        actor.PublicKey.Should().NotBeNull();
+    }
+    
+    [Fact]
+    public void Calling_Parameter_Constructor_In_MultiUserMode_Creates_Actor()
+    {
+        // Arrange
+        const string actorUserName = "uactivitypub";
+        const string notActorUserName = "notuactivitypub";
+        var user = new Mock<IUser>();
+        user.Setup(x => x.Name)
+            .Returns(actorUserName);
+        user.Setup(x => x.Id)
+            .Returns(1);
+        user.Setup(x => x.Email)
+            .Returns($"{actorUserName}@unit.test");
+        
+        var settings = UActivitySettingsHelper.GetSettings();
+        settings.First(s => s.Key == uActivitySettingKeys.SingleUserMode).Value = "false";
+    
+        _uActivitySettingsServiceMock.Setup(x => x.GetAllSettings()).Returns(settings);
+        
+        // Act
+        var actor = _unitUnderTest.GetActor(notActorUserName, user.Object);
+        
+        // Assert
+        actor.Should().NotBeNull();
+        actor.PreferredUsername.Should().Be(actorUserName);
+        actor.Id.Should().Contain(actorUserName);
+        actor.Inbox.Should().Contain(actorUserName);
+        actor.Outbox.Should().Contain(actorUserName);
+        actor.Followers.Should().Contain(actorUserName);
+        actor.Icon.Should().NotBeNull();
+        actor.Icon!.Url.Should().NotBeNull();
+        actor.PublicKey.Should().NotBeNull();
+    }
 }
