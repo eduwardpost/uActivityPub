@@ -7,29 +7,23 @@ using Umbraco.Cms.Infrastructure.Persistence;
 namespace uActivityPub.Helpers;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class SettingSeedHelper : INotificationHandler<UmbracoApplicationStartedNotification>
+public class SettingSeedHelper(IUmbracoDatabaseFactory databaseFactory)
+    : INotificationHandler<UmbracoApplicationStartedNotification>
 {
-    private readonly IUmbracoDatabaseFactory _databaseFactory;
-
-    public SettingSeedHelper(IUmbracoDatabaseFactory  databaseFactory)
-    {
-        _databaseFactory = databaseFactory;
-    }
-    
     public void Handle(UmbracoApplicationStartedNotification notification)
     {
-        var database = _databaseFactory.CreateDatabase();
+        var database = databaseFactory.CreateDatabase();
 
         var settings = database.Fetch<uActivitySettings>($"SELECT * FROM {uActivitySettingKeys.TableName}") 
-                       ?? new List<uActivitySettings>();
+                       ?? [];
 
-        if (settings.All(s => s.Key != uActivitySettingKeys.SingleUserMode))
+        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.SingleUserMode))
             AddSingleUserModeSettings(database);        
         
-        if (settings.All(s => s.Key != uActivitySettingKeys.ContentTypeAlias))
+        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.ContentTypeAlias))
             AddContentTypeAliasSettings(database);
         
-        if (settings.All(s => s.Key != uActivitySettingKeys.GravatarEmail))
+        if (settings.TrueForAll(s => s.Key != uActivitySettingKeys.GravatarEmail))
             AddGravatarEmailSetting(database);
     }
 
