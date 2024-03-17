@@ -72,7 +72,7 @@ public class ActivityPubControllerTests
         
         
         _unitUnderTest = new ActivityPubController(_userServiceMock.Object, _inboxServiceMock.Object,
-            _outboxServiceMock.Object, _webRoutingSettingsMock.Object, _scopeProviderMock.Object,
+            _outboxServiceMock.Object, _scopeProviderMock.Object,
             _uActivitySettingsServiceMock.Object);
         
     }

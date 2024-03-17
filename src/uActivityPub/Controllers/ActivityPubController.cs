@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Umbraco.Cms.Infrastructure.Scoping;
 using uActivityPub.Data;
 using uActivityPub.Models;
-using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.Common.Controllers;
 using uActivityPub.Helpers;
 using uActivityPub.Services;
 using uActivityPub.Services.ActivityPubServices;
+using uActivityPub.Services.ContentServices;
 
 namespace uActivityPub.Controllers;
 
@@ -18,9 +17,9 @@ public class ActivityPubController(
     IUserService userService,
     IInboxService inboxService,
     IOutboxService outboxService,
-    IOptions<WebRoutingSettings> webRoutingSettings,
     IScopeProvider scopeProvider,
-    IUActivitySettingsService uActivitySettingsService)
+    IUActivitySettingsService uActivitySettingsService,
+    IActorService actorService)
     : UmbracoApiController
 {
     [HttpGet("actor/{userName}")]
@@ -34,13 +33,12 @@ public class ActivityPubController(
             if (user == null)
                 return NotFound();
 
-
-            actor = new Actor(user.ActivityPubUserName() ?? string.Empty, webRoutingSettings, uActivitySettingsService, scopeProvider, user);
+            actor = actorService.GetActor(user.ActivityPubUserName() ?? string.Empty, user);
         }
         else
         {
             var user = uActivitySettingsService.GetSettings(uActivitySettingKeys.SingleUserModeUserName)!.Value;
-            actor = new Actor(user, webRoutingSettings, uActivitySettingsService, scopeProvider);
+            actor = actorService.GetActor(user);
         }
         
         return Ok(actor);
