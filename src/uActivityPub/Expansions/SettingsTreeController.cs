@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
@@ -11,6 +12,7 @@ namespace uActivityPub.Expansions;
 
 [Tree("settings", uActivityPubConstants.Package.TreeName, TreeTitle = uActivityPubConstants.Package.Name, TreeGroup = uActivityPubConstants.Package.Name, SortOrder = 5)]
 [PluginController(uActivityPubConstants.Package.Name)]
+[ExcludeFromCodeCoverage]
 public class SettingsTreeController(
     ILocalizedTextService localizedTextService,
     UmbracoApiControllerTypeCollection umbracoApiControllerTypeCollection,
