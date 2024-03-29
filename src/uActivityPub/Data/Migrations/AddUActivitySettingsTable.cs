@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace uActivityPub.Data.Migrations;
 
+[ExcludeFromCodeCoverage]
 public class AddUActivitySettingsTable : MigrationBase
 {
     public AddUActivitySettingsTable(IMigrationContext context) : base(context)

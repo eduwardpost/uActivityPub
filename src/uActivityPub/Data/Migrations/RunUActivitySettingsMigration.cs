@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Migrations;
@@ -9,6 +10,7 @@ using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 
 namespace uActivityPub.Data.Migrations;
 
+[ExcludeFromCodeCoverage]
 public class RunUActivitySettingsMigration : INotificationHandler<UmbracoApplicationStartingNotification>
 {
     private readonly IMigrationPlanExecutor _migrationPlanExecutor;

@@ -17,5 +17,5 @@ public class Collection: ActivityPubBase
 
 public class Collection<T> : Collection
 {
-    public List<T> Items { get; set; } = new();
+    public List<T> Items { get; set; } = [];
 }
