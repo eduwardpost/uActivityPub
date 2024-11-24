@@ -20,7 +20,7 @@ public class ActivityPubController(
     IScopeProvider scopeProvider,
     IUActivitySettingsService uActivitySettingsService,
     IActorService actorService)
-    : UmbracoApiController
+    : Controller
 {
     [HttpGet("actor/{userName}")]
     [Produces("application/activity+json")]

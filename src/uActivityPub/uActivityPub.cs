@@ -2,56 +2,32 @@ using System.Diagnostics.CodeAnalysis;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Manifest;
+using Umbraco.Cms.Infrastructure.Manifest;
 
 namespace uActivityPub;
 
 [ExcludeFromCodeCoverage]
-public class StaticAssetsBoot : IComposer
-{
-    public void Compose(IUmbracoBuilder builder)
-    {
-        builder.AddUActivityPubAssets();
-    }
-}
-
-[ExcludeFromCodeCoverage]
 public static class USyncStaticAssetsExtensions
 {
-    // ReSharper disable once UnusedMethodReturnValue.Global
-    public static IUmbracoBuilder AddUActivityPubAssets(this IUmbracoBuilder builder)
-    {
-        // don't add if the filter is already there .
-        if (builder.ManifestFilters().Has<UActivityPubAssetManifestFilter>())
-            return builder;
-
-        // add the package manifest programatically. 
-        builder.ManifestFilters().Append<UActivityPubAssetManifestFilter>();
-
-        return builder;
-    }
-    
-    
     // ReSharper disable once MemberCanBePrivate.Global
-    internal class UActivityPubAssetManifestFilter : IManifestFilter
+    internal class UActivityPubAssetManifestReader : IPackageManifestReader
     {
-        public void Filter(List<PackageManifest> manifests)
+        public async Task<IEnumerable<PackageManifest>> ReadPackageManifestsAsync()
         {
-            var assembly = typeof(UActivityPubAssetManifestFilter).Assembly;
-            
-            manifests.Add(new PackageManifest
+            return await Task.Run(() =>
             {
-                PackageId = uActivityPubConstants.Package.Name,
-                PackageName = uActivityPubConstants.Package.Name,
-                Version = assembly.GetName().Version!.ToString(3),
-                AllowPackageTelemetry = true,
-                Scripts =
-                [
-                    $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uactivitypub.dashboard.controller.js"
-                ],
-                Stylesheets =
-                [
-                    $"{uActivityPubConstants.Package.PluginPath}/backoffice/uactivitypub/uActivityPub.css"
-                ]
+                var assembly = typeof(UActivityPubAssetManifestReader).Assembly;
+                return new List<PackageManifest>
+                {
+                    new ()
+                    {
+                        Id = uActivityPubConstants.Package.Name,
+                        Name = uActivityPubConstants.Package.Name,
+                        Version = assembly.GetName().Version!.ToString(3),
+                        AllowTelemetry = true,
+                        Extensions = []
+                    }
+                };
             });
         }
     }

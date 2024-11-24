@@ -9,11 +9,12 @@ using uActivityPub.Services;
 using uActivityPub.Services.ActivityPubServices;
 using uActivityPub.Services.ContentServices;
 using uActivityPub.Services.HelperServices;
+using Umbraco.Cms.Api.Management.Security.Authorization.User;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Web.BackOffice.Authorization;
+using Umbraco.Cms.Infrastructure.Manifest;
 
 namespace uActivityPub.Composers;
 
@@ -23,6 +24,8 @@ public class UActivityPubComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
+        builder.Services.AddSingleton<IPackageManifestReader, USyncStaticAssetsExtensions.UActivityPubAssetManifestReader>();
+        
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunUserKeysMigration>();
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunReceivedActivitiesMigration>();
         builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunUActivitySettingsMigration>();
@@ -44,7 +47,7 @@ public class UActivityPubComposer : IComposer
         options.AddPolicy(SyncAuthorizationPolicies.TreeAccessUActivityPub, policy =>
         {
             policy.AuthenticationSchemes.Add(backofficeAuthenticationScheme);
-            policy.Requirements.Add(new TreeRequirement(uActivityPubConstants.Package.TreeName));
+            policy.Requirements.Add(new BackOfficeRequirement());
         });
     }
 }

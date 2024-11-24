@@ -15,7 +15,7 @@ public class AddUActivitySettingsTable : MigrationBase
         Logger.LogDebug("Running migration {MigrationStep}", "AddUActivityTable");
 
         // Lots of methods available in the MigrationBase class - discover with this.
-        if (TableExists("uActivitySettings"))
+        if (!TableExists("uActivitySettings"))
         {
             Create.Table<UActivitySettings>().Do();
         }

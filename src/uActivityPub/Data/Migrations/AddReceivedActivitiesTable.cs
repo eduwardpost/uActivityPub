@@ -15,7 +15,7 @@ public class AddReceivedActivitiesTable : MigrationBase
         Logger.LogDebug("Running migration {MigrationStep}", "AddReceivedActivitiesTable");
 
         // Lots of methods available in the MigrationBase class - discover with this.
-        if (TableExists("receivedActivityPubActivities"))
+        if (!TableExists("receivedActivityPubActivities"))
         {
             Create.Table<ReceivedActivitiesSchema>().Do();
         }

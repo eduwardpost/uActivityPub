@@ -14,7 +14,7 @@ public class WebfingerController(
     IUserService userService,
     IOptions<WebRoutingSettings> webRoutingSettings,
     IUActivitySettingsService uActivitySettingsService)
-    : UmbracoApiController
+    : Controller
 {
     [HttpGet("")]
     public ActionResult<WebFingerResponse> HandleRequest()

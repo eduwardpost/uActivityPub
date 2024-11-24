@@ -15,7 +15,7 @@ public class AddUserKeysTable : MigrationBase
         Logger.LogDebug("Running migration {MigrationStep}", "AddUserKeysTable");
 
         // Lots of methods available in the MigrationBase class - discover with this.
-        if (TableExists("userKeys"))
+        if (!TableExists("userKeys"))
         {
             Create.Table<UserKeysSchema>().Do();
         }

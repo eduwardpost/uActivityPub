@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using uActivityPub.Authorization;
 using uActivityPub.Data;
 using uActivityPub.Services;
-using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.Controllers;
 
 namespace uActivityPub.Controllers.PluginControllers;
 
 [PluginController(uActivityPubConstants.Package.Name)]
 [Authorize(Policy = SyncAuthorizationPolicies.TreeAccessUActivityPub)]
-public class UActivityPubDashboardApiController : UmbracoAuthorizedJsonController
+public class UActivityPubDashboardApiController : Controller
 {
     private readonly IUActivitySettingsService _uActivitySettingsService;
 
