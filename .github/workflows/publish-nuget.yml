@@ -65,6 +65,8 @@ jobs:
       # Install the .NET SDK indicated in the global.json file
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: './src/global.json'
 
       # Download the NuGet package created in the previous job
       - uses: actions/download-artifact@v4
@@ -91,6 +93,8 @@ jobs:
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: './src/global.json'
 
       # Setup sonar cloud scanner
     - name: Set up JDK 17
@@ -161,6 +165,8 @@ jobs:
       # Install the .NET SDK indicated in the global.json file
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: './src/global.json'
 
       # Publish all NuGet packages to NuGet.org
       # Use --skip-duplicate to prevent errors if a package with the same version already exists.
