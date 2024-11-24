@@ -25,8 +25,8 @@
         <PackageIcon>uActivityPub-icon.png</PackageIcon>
         <Product>uActivityPub</Product>
         <PackageId>uActivityPub</PackageId>
-        <Version>1.1.1</Version>
-        <AssemblyVersion>1.1.1</AssemblyVersion>
+        <Version>2.0.0-alpha.1</Version>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -46,7 +46,6 @@
         <PackageReference Include="Umbraco.Cms.Api.Management" Version="15.0.0" />
         <PackageReference Include="Umbraco.Cms.Core" Version="15.0.0" />
         <PackageReference Include="Umbraco.Cms.Infrastructure" Version="15.0.0" />
-<!--        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="15.0.0" />-->
         <PackageReference Include="Umbraco.Cms.Web.Common" Version="15.0.0" />
     </ItemGroup>
     
