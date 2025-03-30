@@ -43,10 +43,10 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Umbraco.Cms.Core" Version="13.3.2" />
-        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.3.2" />
-        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.3.2" />
-        <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.3.2" />
+        <PackageReference Include="Umbraco.Cms.Core" Version="13.5.2" />
+        <PackageReference Include="Umbraco.Cms.Infrastructure" Version="13.5.2" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.5.2" />
+        <PackageReference Include="Umbraco.Cms.Web.Common" Version="13.5.2" />
     </ItemGroup>
     
     <ItemGroup>
